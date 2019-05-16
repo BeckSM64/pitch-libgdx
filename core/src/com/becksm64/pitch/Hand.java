@@ -58,6 +58,17 @@ public class Hand {
         return this.hand.size();
     }
 
+    /*
+     * Returns true if hand is empty
+     */
+    public boolean isEmpty() {
+        if(this.hand.size() > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     /* Plays the specified card, according to index, from hand. Also removes that card from hand */
     public Card playCard(int index) {
 

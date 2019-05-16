@@ -46,20 +46,50 @@ public class GameScreen implements Screen {
         hand4 = new Hand();
 
         //Deal hands
+        dealHands();
+
+        //Game logic
+        trump = null;//Starts as null
+        currentSuit = null;
+        numPlays = 0;//Number of cards played so far in one play
+        //isStartOfRound = true;
+        //isRoundOver = false;
+
+        cam = new OrthographicCamera();
+        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    }
+
+    /*
+     * Return true if all hands are empty, signifying end of round
+     */
+    private boolean isRoundOver() {
+        if(hand.isEmpty() && hand2.isEmpty() && hand3.isEmpty() && hand4.isEmpty()) {
+            return true;
+        } return false;
+    }
+
+    /*
+     * Deals a hand to all the players from the deck
+     */
+    private void dealHands() {
         for(int i = 0; i < 6; i++) {
             hand.addToHand(deck.getTopCard());
             hand2.addToHand(deck.getTopCard());
             hand3.addToHand(deck.getTopCard());
             hand4.addToHand(deck.getTopCard());
         }
+    }
 
-        //Game logic
-        trump = null;//Starts as null
-        currentSuit = null;
-        numPlays = 0;//Number of cards played so far in one play
-
-        cam = new OrthographicCamera();
-        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    /*
+     * Resets deck, player hands, and main card pile for a new round
+     */
+    private void resetRound() {
+        mainPile.dispose();//I think assets need to be disposed before recreating object
+        mainPile = new CardCollection();
+        deck.dispose();
+        deck = new Deck();
+        deck.shuffle();
+        dealHands();
     }
 
     @Override
@@ -121,8 +151,8 @@ public class GameScreen implements Screen {
 
         batch.end();
 
-        //Test playing a card
-        if(Gdx.input.justTouched()) {
+        //Test playing a card, only if all hands are not empty
+        if(Gdx.input.justTouched() && !isRoundOver()) {
 
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             cam.unproject(touchPos);
@@ -187,12 +217,17 @@ public class GameScreen implements Screen {
                     numPlays += 1;//Increment the number of cards played so far this play
                 }
             }
+
+            //Check if play is over, after all four players have gone
+            if(numPlays > 3) {
+                currentSuit = null;//Reset current suit
+                numPlays = 0;
+            }
         }
 
-        //Check if play is over, after all four players have gone
-        if(numPlays > 3) {
-            currentSuit = null;//Reset current suit
-            numPlays = 0;
+        //When round is over, start a new round
+        if(isRoundOver()) {
+            resetRound();
         }
     }
 
