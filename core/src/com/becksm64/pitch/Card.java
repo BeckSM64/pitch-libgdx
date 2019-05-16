@@ -99,28 +99,31 @@ public class Card {
         return this.cardImage;
     }
 
-    public boolean isPlayable(String trump, String currentSuit) {
+    public boolean isPlayable(String trump, String currentSuit, int numPlays) {
 
-        //Will eventually first need to check if trump is null
+        //check if beginning of round
+        if(currentSuit == null && trump == null) {
+            return true;
+        }
 
-        //check if currentSuit is null
-        if(currentSuit == null) {
+        //If beginning of play, then any card is playable
+        if(numPlays == 0) {
             return true;
         }
 
         //Check if trump and current suit are the same
-        /*if(trump.equals(currentSuit)) {
+        if(trump.equals(currentSuit)) {
             if(this.suit.equals(trump)) {
                 return true;
             } else {
                 return false;
             }
-        }*/
+        }
 
         //If card suit is trump, then can be played no matter what
-        /*if(this.suit.equals(trump)) {
+        if(this.suit.equals(trump)) {
             return true;
-        }*/
+        }
 
         //Check if suit is equal to current suit
         if(this.suit.equals(currentSuit)) {

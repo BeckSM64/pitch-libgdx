@@ -69,6 +69,17 @@ public class Hand {
         }
     }
 
+    /*
+     * Returns true if hand has 6 cards
+     */
+    public boolean isFull() {
+        if(this.hand.size() == 6) {
+            return true;
+        } else{
+            return false;
+        }
+    }
+
     /* Plays the specified card, according to index, from hand. Also removes that card from hand */
     public Card playCard(int index) {
 

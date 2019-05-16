@@ -69,6 +69,17 @@ public class GameScreen implements Screen {
     }
 
     /*
+     * Return true if all players have all their cards
+     */
+    private boolean isStartOfRound() {
+        if(hand.isFull() && hand2.isFull() && hand3.isFull() && hand4.isFull()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /*
      * Deals a hand to all the players from the deck
      */
     private void dealHands() {
@@ -161,8 +172,12 @@ public class GameScreen implements Screen {
             for(int i = 0; i < hand.size(); i++) {
 
                 Card currentCard = hand.getCard(i);
-                if(currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit)) {
+                if(currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit, numPlays)) {
 
+                    if(isStartOfRound()) {
+                        trump = currentCard.getSuit();
+                    }
+                    System.out.println(trump);
                     Card cardToPlay = hand.playCard(i);
                     if(numPlays == 0) {
                         currentSuit = cardToPlay.getSuit();//Test setting currentSuit
@@ -177,8 +192,12 @@ public class GameScreen implements Screen {
             for(int i = 0; i < hand2.size(); i++) {
 
                 Card currentCard = hand2.getCard(i);
-                if(currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit)) {
+                if(currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit, numPlays)) {
 
+                    if(isStartOfRound()) {
+                        trump = currentCard.getSuit();
+                    }
+                    System.out.println(trump);
                     Card cardToPlay = hand2.playCard(i);
                     if(numPlays == 0) {
                         currentSuit = cardToPlay.getSuit();//Test setting currentSuit
@@ -192,8 +211,12 @@ public class GameScreen implements Screen {
             for(int i = 0; i < hand3.size(); i++) {
 
                 Card currentCard = hand3.getCard(i);
-                if(currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit)) {
+                if(currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit, numPlays)) {
 
+                    if(isStartOfRound()) {
+                        trump = currentCard.getSuit();
+                    }
+                    System.out.println(trump);
                     Card cardToPlay = hand3.playCard(i);
                     if(numPlays == 0) {
                         currentSuit = cardToPlay.getSuit();//Test setting currentSuit
@@ -207,8 +230,12 @@ public class GameScreen implements Screen {
             for(int i = 0; i < hand4.size(); i++) {
 
                 Card currentCard = hand4.getCard(i);
-                if(currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit)) {
+                if(currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit, numPlays)) {
 
+                    if(isStartOfRound()) {
+                        trump = currentCard.getSuit();
+                    }
+                    System.out.println(trump);
                     Card cardToPlay = hand4.playCard(i);
                     if(numPlays == 0) {
                         currentSuit = cardToPlay.getSuit();//Test setting currentSuit
