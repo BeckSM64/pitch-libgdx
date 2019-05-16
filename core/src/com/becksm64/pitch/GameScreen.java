@@ -3,6 +3,7 @@ package com.becksm64.pitch;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -131,7 +132,22 @@ public class GameScreen implements Screen {
             Hand currentHand = hands.get(i);
             for(int j = 0; j < currentHand.size(); j++) {
 
-                Card currentCard = currentHand.getCard(j);
+                Card currentCard = currentHand.getCard(j);//Get the current card
+
+                //Draw a card with transparency if it isn't a playable card
+                if(currentHand.hasPlayableCard(trump, currentSuit, numPlays)) {
+                    if (currentCard.isPlayable(trump, currentSuit, numPlays)) {
+                        Color c = batch.getColor();
+                        batch.setColor(c.r, c.g, c.b, 1);
+                    } else {
+                        Color c = batch.getColor();
+                        batch.setColor(c.r, c.g, c.b, 0.1f);
+                    }
+                } else {
+                    Color c = batch.getColor();
+                    batch.setColor(c.r, c.g, c.b, 1);
+                }
+
                 if(i == 0) {
                     currentCard.setPositionX((Gdx.graphics.getWidth() / 6) * j);
                     batch.draw(currentCard.getCardImage(), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth(), currentCard.getCardHeight());
@@ -147,6 +163,10 @@ public class GameScreen implements Screen {
                 }
             }
         }
+
+        //Get rid of transparency
+        Color c = batch.getColor();
+        batch.setColor(c.r, c.g, c.b, 1);
 
         //Draw main pile into which cards are played
         for(int i = 0; i < mainPile.size(); i++) {
@@ -236,7 +256,6 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) {
         cam.setToOrtho(false, width, height);
         batch.setProjectionMatrix(cam.combined);
-        System.out.println("Screen resized");
     }
 
     @Override
