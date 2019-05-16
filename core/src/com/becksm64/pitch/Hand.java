@@ -70,10 +70,10 @@ public class Hand {
     /*
      * Returns true if there is a playable card in hand
      */
-    public boolean hasPlayableCard(String trump, String currentSuit, int numPlays) {
+    public boolean hasCurrentSuitCard(String currentSuit) {
 
         for(int i = 0; i < this.hand.size(); i++) {
-            if(this.getCard(i).isPlayable(trump, currentSuit, numPlays)) {
+            if(this.getCard(i).getSuit().equals(currentSuit)) {
                 return true;
             }
         } return false;

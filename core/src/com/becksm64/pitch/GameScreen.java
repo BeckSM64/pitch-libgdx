@@ -135,7 +135,7 @@ public class GameScreen implements Screen {
                 Card currentCard = currentHand.getCard(j);//Get the current card
 
                 //Draw a card with transparency if it isn't a playable card
-                if(currentHand.hasPlayableCard(trump, currentSuit, numPlays)) {
+                if(currentHand.hasCurrentSuitCard(currentSuit)) {
                     if (currentCard.isPlayable(trump, currentSuit, numPlays)) {
                         Color c = batch.getColor();
                         batch.setColor(c.r, c.g, c.b, 1);
@@ -189,7 +189,7 @@ public class GameScreen implements Screen {
                 Hand currentHand = hands.get(i);
 
                 //If hand has playable card, only select few cards may be playable
-                if(currentHand.hasPlayableCard(trump, currentSuit, numPlays)) {
+                if(currentHand.hasCurrentSuitCard(currentSuit)) {
                     for (int j = 0; j < currentHand.size(); j++) {
 
                         Card currentCard = currentHand.getCard(j);
@@ -200,11 +200,12 @@ public class GameScreen implements Screen {
                             if (isStartOfRound()) {
                                 trump = currentCard.getSuit();
                             }
-                            System.out.println(trump);
+                            //System.out.println("Trump: " + trump);
                             Card cardToPlay = currentHand.playCard(j);
                             if (numPlays == 0) {
                                 currentSuit = cardToPlay.getSuit();//Test setting currentSuit
                             }
+                            //System.out.println("Current Suit: " + currentSuit);
                             mainPile.addToPile(cardToPlay);
                             numPlays += 1;//Increment the number of cards played so far this play
                             playerTurn += 1;//Make it the next player's turn
@@ -221,11 +222,12 @@ public class GameScreen implements Screen {
                             if (isStartOfRound()) {
                                 trump = currentCard.getSuit();
                             }
-                            System.out.println(trump);
+                            //System.out.println("Trump: " + trump);
                             Card cardToPlay = currentHand.playCard(j);
                             if (numPlays == 0) {
                                 currentSuit = cardToPlay.getSuit();//Test setting currentSuit
                             }
+                            //System.out.println("Current Suit: " + currentSuit);
                             mainPile.addToPile(cardToPlay);
                             numPlays += 1;//Increment the number of cards played so far this play
                             playerTurn += 1;//Make it the next player's turn
