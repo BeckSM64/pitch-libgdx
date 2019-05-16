@@ -35,19 +35,6 @@ public class Hand {
         }
     }
 
-    /* Show cards of a specified suit */
-    public void showCardsOfSuit(String suit) {
-
-        //Check if has trump but not current suit
-        for(int i = 0; i < this.size(); i++) {
-
-            Card currentCard = this.getCard(i);
-            if(currentCard.getSuit() == suit) {
-                System.out.println(i + ": " + currentCard.getName());
-            }
-        }
-    }
-
     /* Add a card to the hand */
     public void addToHand(Card card) {
         this.hand.add(card);
@@ -78,6 +65,18 @@ public class Hand {
         } else{
             return false;
         }
+    }
+
+    /*
+     * Returns true if there is a playable card in hand
+     */
+    public boolean hasPlayableCard(String trump, String currentSuit, int numPlays) {
+
+        for(int i = 0; i < this.hand.size(); i++) {
+            if(this.getCard(i).isPlayable(trump, currentSuit, numPlays)) {
+                return true;
+            }
+        } return false;
     }
 
     /* Plays the specified card, according to index, from hand. Also removes that card from hand */

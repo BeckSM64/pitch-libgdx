@@ -167,24 +167,49 @@ public class GameScreen implements Screen {
 
                 //Check if player card has been touched
                 Hand currentHand = hands.get(i);
-                for(int j = 0; j < currentHand.size(); j++) {
 
-                    Card currentCard = currentHand.getCard(j);
+                //If hand has playable card, only select few cards may be playable
+                if(currentHand.hasPlayableCard(trump, currentSuit, numPlays)) {
+                    for (int j = 0; j < currentHand.size(); j++) {
 
-                    //Only play card if it was touched, is playable, and it is that player's turn
-                    if(currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit, numPlays) && playerTurn == i) {
+                        Card currentCard = currentHand.getCard(j);
 
-                        if(isStartOfRound()) {
-                            trump = currentCard.getSuit();
+                        //Only play card if it was touched, is playable, and it is that player's turn
+                        if (currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit, numPlays) && playerTurn == i) {
+
+                            if (isStartOfRound()) {
+                                trump = currentCard.getSuit();
+                            }
+                            System.out.println(trump);
+                            Card cardToPlay = currentHand.playCard(j);
+                            if (numPlays == 0) {
+                                currentSuit = cardToPlay.getSuit();//Test setting currentSuit
+                            }
+                            mainPile.addToPile(cardToPlay);
+                            numPlays += 1;//Increment the number of cards played so far this play
+                            playerTurn += 1;//Make it the next player's turn
                         }
-                        System.out.println(trump);
-                        Card cardToPlay = currentHand.playCard(j);
-                        if(numPlays == 0) {
-                            currentSuit = cardToPlay.getSuit();//Test setting currentSuit
+                    }
+                } else {
+                    for (int j = 0; j < currentHand.size(); j++) {
+
+                        Card currentCard = currentHand.getCard(j);
+
+                        //Only play card if it was touched, is playable, and it is that player's turn
+                        if (currentCard.getBounds().contains(touchPos.x, touchPos.y) && playerTurn == i) {
+
+                            if (isStartOfRound()) {
+                                trump = currentCard.getSuit();
+                            }
+                            System.out.println(trump);
+                            Card cardToPlay = currentHand.playCard(j);
+                            if (numPlays == 0) {
+                                currentSuit = cardToPlay.getSuit();//Test setting currentSuit
+                            }
+                            mainPile.addToPile(cardToPlay);
+                            numPlays += 1;//Increment the number of cards played so far this play
+                            playerTurn += 1;//Make it the next player's turn
                         }
-                        mainPile.addToPile(cardToPlay);
-                        numPlays += 1;//Increment the number of cards played so far this play
-                        playerTurn += 1;//Make it the next player's turn
                     }
                 }
             }
