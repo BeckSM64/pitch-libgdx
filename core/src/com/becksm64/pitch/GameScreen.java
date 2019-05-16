@@ -234,7 +234,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        cam.setToOrtho(false, width, height);
+        batch.setProjectionMatrix(cam.combined);
+        System.out.println("Screen resized");
     }
 
     @Override
