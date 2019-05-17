@@ -46,6 +46,11 @@ public class GameScreen implements Screen {
     private int playerTurn;
     private Card bestCardPlayed;
     private int playedBestCard;
+    private boolean calculatedScore;
+    private Label player1Score;
+    private Label player2Score;
+    private Label player3Score;
+    private Label player4Score;
 
     private OrthographicCamera cam;
 
@@ -85,6 +90,7 @@ public class GameScreen implements Screen {
         currentSuit = null;
         numPlays = 0;//Number of cards played so far in one play
         playerTurn = 0;//Index for collection of hands
+        calculatedScore = false;
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -108,6 +114,8 @@ public class GameScreen implements Screen {
         lowTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
         Label gameTitle = new Label("Game", skin);
         gameTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        Label totalScoreTitle = new Label("Score", skin);
+        totalScoreTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
         Label player1 = new Label("1", skin);
         player1.setStyle(new Label.LabelStyle(font72, Color.WHITE));
         Label player2 = new Label("2", skin);
@@ -116,6 +124,14 @@ public class GameScreen implements Screen {
         player3.setStyle(new Label.LabelStyle(font72, Color.WHITE));
         Label player4 = new Label("4", skin);
         player4.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player1Score = new Label(Integer.toString(players.get(0).getScore()), skin);
+        player1Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player2Score = new Label(Integer.toString(players.get(1).getScore()), skin);
+        player2Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player3Score = new Label(Integer.toString(players.get(2).getScore()), skin);
+        player3Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player4Score = new Label(Integer.toString(players.get(3).getScore()), skin);
+        player4Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
         nextRoundBtn = new TextButton("Next Round", skin);
 
         //Stage and table for score at end of round
@@ -124,12 +140,11 @@ public class GameScreen implements Screen {
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        table.debug();//Draws the table lines so you can see the actual layout
         table.add(playerTitle).padRight(50);//First row
         table.add(player1).padRight(50);
         table.add(player2).padRight(50);
         table.add(player3).padRight(50);
-        table.add(player4);
+        table.add(player4).padRight(50);
         table.row();
         table.add(highTitle).padRight(50).align(Align.left);//Second row
         table.row();
@@ -139,7 +154,14 @@ public class GameScreen implements Screen {
         table.row();
         table.add(gameTitle).padRight(50).align(Align.left);//Fifth row
         table.row();
+        table.add(totalScoreTitle).padRight(50).align(Align.left);//Sixth row
+        table.add(player1Score).padRight(50);
+        table.add(player2Score).padRight(50);
+        table.add(player3Score).padRight(50);
+        table.add(player4Score).padRight(50);
+        table.row();
         table.add(nextRoundBtn).colspan(5);
+        table.debug();//Draws the table lines so you can see the actual layout
     }
 
     /*
@@ -180,6 +202,7 @@ public class GameScreen implements Screen {
 
         //Reset and dispose of game objects
         trump = null;
+        calculatedScore = false;
         mainPile.dispose();//I think assets need to be disposed before recreating object
         deck.dispose();
         for(Player player : players) {
@@ -226,8 +249,124 @@ public class GameScreen implements Screen {
     }
 
     private void displayScoreTable() {
-        //player1.setText(Integer.toString(playedBestCard));
+        player1Score.setText(Integer.toString(players.get(0).getScore()));
+        player2Score.setText(Integer.toString(players.get(1).getScore()));
+        player3Score.setText(Integer.toString(players.get(2).getScore()));
+        player4Score.setText(Integer.toString(players.get(3).getScore()));
+        calculatedScore = true;
         stage.draw();
+    }
+
+    /*
+     * Returns the index of the player with the highest trump card
+     */
+    private int findHighestTrumpPlayer() {
+
+        int hadHighestTrump = -1;
+        Card highestTrump = null;
+        for(int i = 0; i < players.size(); i++) {
+
+            Player currentPlayer = players.get(i);
+            Card playersHighestTrump = currentPlayer.getWonCards().getHighestTrump(trump);//This could be null if had no trump, check for it
+
+            if(playersHighestTrump != null) {
+
+                if(highestTrump == null || playersHighestTrump.getValue() > highestTrump.getValue()) {
+                    highestTrump = playersHighestTrump;
+                    hadHighestTrump = i;
+                }
+            }
+        } return hadHighestTrump;
+    }
+
+    /*
+     * Returns the index of the player with the highest game point score
+     */
+    private int findHighestGamePointPlayer() {
+
+        int hadHighestGameScore = -1;
+        int highestGameScore = 0;
+        for(int i = 0; i < players.size(); i++) {
+
+            Player currentPlayer = players.get(i);
+            int playersGameScore = currentPlayer.getWonCards().getGamePointScore();//Player's game point score
+
+            if(playersGameScore > 0) {
+
+                if(highestGameScore == 0 || playersGameScore > highestGameScore) {
+                    highestGameScore = playersGameScore;
+                    hadHighestGameScore = i;
+                }
+            }
+        } return hadHighestGameScore;
+    }
+
+    /*
+     * Returns the index of the player with the lowest trump card
+     */
+    private int findLowestTrumpPlayer() {
+
+        int hadLowestTrump = -1;
+        Card lowestTrump = null;
+        for(int i = 0; i < players.size(); i++) {
+
+            Player currentPlayer = players.get(i);
+            Card playersLowestTrump = currentPlayer.getWonCards().getLowestTrump(trump);//This could be null if had no trump, check for it
+
+            if(playersLowestTrump != null) {
+
+                if(lowestTrump == null || playersLowestTrump.getValue() < lowestTrump.getValue()) {
+                    lowestTrump = playersLowestTrump;
+                    hadLowestTrump = i;
+                }
+            }
+        } return hadLowestTrump;
+    }
+
+    /*
+     * Calculates each player's score and awards their points
+     */
+    private void calculatePlayerScores() {
+
+        //Get player index who had lowest trump
+        int hadLowestTrump = findLowestTrumpPlayer();
+        int hadHighestTrump = findHighestTrumpPlayer();
+        int hadGamePoint = findHighestGamePointPlayer();
+
+        //Loop through player list to calculate score for each individual player
+        for(int i = 0; i < players.size(); i++) {
+
+            Player currentPlayer = players.get(i);
+            int pointsToAward = 0;
+            //int playerBid = currentPlayer.getBid();
+
+            //See if player was lowest trump holder
+            if(hadLowestTrump == i) {
+                pointsToAward += 1;
+            }
+
+            //See if player was highest trump holder
+            if(hadHighestTrump == i) {
+                pointsToAward += 1;
+            }
+
+            //See if this player had the jack
+            if(currentPlayer.getWonCards().hasTrumpJack(trump)) {
+                pointsToAward += 1;
+            }
+
+            //See if this player got game point
+            if(hadGamePoint == i) {
+                pointsToAward += 1;
+            }
+
+            //Check to make sure player met their bid before awarding points
+            //if(pointsToAward >= playerBid) {
+                currentPlayer.addToScore(pointsToAward);
+            //} else {
+                //currentPlayer.addToScore(playerBid * -1);//Subtract bid from player score
+            //}
+        }
     }
 
     @Override
@@ -372,6 +511,8 @@ public class GameScreen implements Screen {
 
         //When round is over, start a new round
         if(isRoundOver()) {
+            if(!calculatedScore)
+                calculatePlayerScores();
             displayScoreTable();
         }
     }
