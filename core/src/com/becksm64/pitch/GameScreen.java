@@ -7,9 +7,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +48,24 @@ public class GameScreen implements Screen {
     int playedBestCard;
 
     OrthographicCamera cam;
+
+    //Stage and table to display score at the end of round
+    Stage stage;
+    Table table;
+    BitmapFont font72;
+    FreeTypeFontGenerator generator;
+    FreeTypeFontGenerator.FreeTypeFontParameter parameter;
+    Label playerTitle;
+    Label highTitle;
+    Label jackTitle;
+    Label lowTitle;
+    Label gameTitle;
+    Label player1;
+    Label player2;
+    Label player3;
+    Label player4;
+    TextButton nextRoundBtn;
+    Skin skin;
 
     public GameScreen(Game game) {
 
@@ -74,6 +102,58 @@ public class GameScreen implements Screen {
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        //Generate font
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/cour.TTF"));
+        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 72;
+        font72 = generator.generateFont(parameter);
+        generator.dispose();//Get rid of generator after done making fonts
+
+        //Create skin for labels and setup labels for scoring at end of round
+        skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+        playerTitle = new Label("Player", skin);
+        playerTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        highTitle = new Label("High", skin);
+        highTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        jackTitle = new Label("Jack", skin);
+        jackTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        lowTitle = new Label("Low", skin);
+        lowTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        gameTitle = new Label("Game", skin);
+        gameTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player1 = new Label("1", skin);
+        player1.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player2 = new Label("2", skin);
+        player2.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player3 = new Label("3", skin);
+        player3.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player4 = new Label("4", skin);
+        player4.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        nextRoundBtn = new TextButton("Next Round", skin);
+
+        //Stage and table for score at end of round
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);//Allow input for stage
+        table = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+        table.debug();//Draws the table lines so you can see the actual layout
+        table.add(playerTitle).padRight(50);//First row
+        table.add(player1).padRight(50);
+        table.add(player2).padRight(50);
+        table.add(player3).padRight(50);
+        table.add(player4);
+        table.row();
+        table.add(highTitle).padRight(50).align(Align.left);//Second row
+        table.row();
+        table.add(jackTitle).padRight(50).align(Align.left);//Third row
+        table.row();
+        table.add(lowTitle).padRight(50).align(Align.left);//Fourth row
+        table.row();
+        table.add(gameTitle).padRight(50).align(Align.left);//Fifth row
+        table.row();
+        table.add(nextRoundBtn).colspan(5);
     }
 
     /*
@@ -159,9 +239,20 @@ public class GameScreen implements Screen {
         }
     }
 
+    private void displayScoreTable() {
+        //player1.setText(Integer.toString(playedBestCard));
+        stage.draw();
+    }
+
     @Override
     public void show() {
-
+        //Hand next round button click
+        nextRoundBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                resetRound();
+            }
+        });
     }
 
     @Override
@@ -274,8 +365,6 @@ public class GameScreen implements Screen {
                             bestCardPlayed = cardToPlay;
                             playedBestCard = playerTurn;
                         }
-                        System.out.println("Played best card: " + playedBestCard);
-                        System.out.println("Turn " + numPlays);
                         mainPile.addToPile(cardToPlay);
                         if(numPlays != 3)
                             playerTurn += 1;//Make it the next player's turn
@@ -297,7 +386,7 @@ public class GameScreen implements Screen {
 
         //When round is over, start a new round
         if(isRoundOver()) {
-            resetRound();
+            displayScoreTable();
         }
     }
 
