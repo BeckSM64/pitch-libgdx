@@ -108,6 +108,21 @@ public class GameScreen implements Screen {
         dealHands();
     }
 
+    /*
+     * Resets the table after each player has played a card
+     */
+    private void resetPlay() {
+
+        //Remove cards from the main pile and add them to the pile of cards that the player won
+        for(int i = 0; i < players.size(); i++) {
+            players.get(playedBestCard).addToCardsWon(mainPile.removeCard());
+        }
+        currentSuit = null;//Reset current suit
+        numPlays = 0;
+        playerTurn = playedBestCard;
+        bestCardPlayed = null;
+    }
+
     @Override
     public void show() {
 
@@ -202,15 +217,21 @@ public class GameScreen implements Screen {
                             if (isStartOfRound()) {
                                 trump = currentCard.getSuit();
                             }
-                            //System.out.println("Trump: " + trump);
                             Card cardToPlay = currentHand.playCard(j);
                             if (numPlays == 0) {
                                 currentSuit = cardToPlay.getSuit();//Test setting currentSuit
                             }
-                            //System.out.println("Current Suit: " + currentSuit);
+                            //Check if the card that was just played is the best card
+                            if(mainPile.isBestCard(cardToPlay, trump, currentSuit)) {
+                                bestCardPlayed = cardToPlay;
+                                playedBestCard = playerTurn;
+                            }
+                            System.out.println("Played best card: " + playedBestCard);
+                            System.out.println("Turn " + numPlays);
                             mainPile.addToPile(cardToPlay);
+                            if(numPlays != 3)
+                                playerTurn += 1;//Make it the next player's turn
                             numPlays += 1;//Increment the number of cards played so far this play
-                            playerTurn += 1;//Make it the next player's turn
                         }
                     }
                 } else {
@@ -224,21 +245,21 @@ public class GameScreen implements Screen {
                             if (isStartOfRound()) {
                                 trump = currentCard.getSuit();
                             }
-                            //System.out.println("Trump: " + trump);
                             Card cardToPlay = currentHand.playCard(j);
                             if (numPlays == 0) {
                                 currentSuit = cardToPlay.getSuit();//Test setting currentSuit
                             }
-                            //System.out.println("Current Suit: " + currentSuit);
                             //Check if the card that was just played is the best card
                             if(mainPile.isBestCard(cardToPlay, trump, currentSuit)) {
                                 bestCardPlayed = cardToPlay;
                                 playedBestCard = playerTurn;
                             }
                             System.out.println("Played best card: " + playedBestCard);
+                            System.out.println("Turn " + numPlays);
                             mainPile.addToPile(cardToPlay);
+                            if(numPlays != 3)
+                                playerTurn += 1;//Make it the next player's turn
                             numPlays += 1;//Increment the number of cards played so far this play
-                            playerTurn += 1;//Make it the next player's turn
                         }
                     }
                 }
@@ -251,10 +272,7 @@ public class GameScreen implements Screen {
 
             //Check if play is over, after all four players have gone
             if(numPlays > 3) {
-                currentSuit = null;//Reset current suit
-                numPlays = 0;
-                playerTurn = playedBestCard;
-                bestCardPlayed = null;
+                resetPlay();
             }
         }
 
