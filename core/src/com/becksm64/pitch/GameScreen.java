@@ -26,46 +26,32 @@ import java.util.List;
 
 public class GameScreen implements Screen {
 
-    Game game;
-    SpriteBatch batch;
-    Vector3 touchPos;
+    private Game game;
+    private SpriteBatch batch;
+    private Vector3 touchPos;
 
-    Deck deck;
-    CardCollection mainPile;
-    List<Player> players;
-    Texture spadeImage;
-    Texture clubImage;
-    Texture heartImage;
-    Texture diamondImage;
-    Texture trumpImage;//Will change depending on current trump
+    private Deck deck;
+    private CardCollection mainPile;
+    private List<Player> players;
+    private Texture spadeImage;
+    private Texture clubImage;
+    private Texture heartImage;
+    private Texture diamondImage;
+    private Texture trumpImage;//Will change depending on current trump
 
     //Test game logic
-    String trump;
-    String currentSuit;
-    int numPlays;
-    int playerTurn;
-    Card bestCardPlayed;
-    int playedBestCard;
+    private String trump;
+    private String currentSuit;
+    private int numPlays;
+    private int playerTurn;
+    private Card bestCardPlayed;
+    private int playedBestCard;
 
-    OrthographicCamera cam;
+    private OrthographicCamera cam;
 
     //Stage and table to display score at the end of round
-    Stage stage;
-    Table table;
-    BitmapFont font72;
-    FreeTypeFontGenerator generator;
-    FreeTypeFontGenerator.FreeTypeFontParameter parameter;
-    Label playerTitle;
-    Label highTitle;
-    Label jackTitle;
-    Label lowTitle;
-    Label gameTitle;
-    Label player1;
-    Label player2;
-    Label player3;
-    Label player4;
-    TextButton nextRoundBtn;
-    Skin skin;
+    private Stage stage;
+    private TextButton nextRoundBtn;
 
     public GameScreen(Game game) {
 
@@ -104,38 +90,38 @@ public class GameScreen implements Screen {
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         //Generate font
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/cour.TTF"));
-        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/cour.TTF"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 72;
-        font72 = generator.generateFont(parameter);
+        BitmapFont font72 = generator.generateFont(parameter);
         generator.dispose();//Get rid of generator after done making fonts
 
         //Create skin for labels and setup labels for scoring at end of round
-        skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-        playerTitle = new Label("Player", skin);
+        Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+        Label playerTitle = new Label("Player", skin);
         playerTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        highTitle = new Label("High", skin);
+        Label highTitle = new Label("High", skin);
         highTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        jackTitle = new Label("Jack", skin);
+        Label jackTitle = new Label("Jack", skin);
         jackTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        lowTitle = new Label("Low", skin);
+        Label lowTitle = new Label("Low", skin);
         lowTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        gameTitle = new Label("Game", skin);
+        Label gameTitle = new Label("Game", skin);
         gameTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        player1 = new Label("1", skin);
+        Label player1 = new Label("1", skin);
         player1.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        player2 = new Label("2", skin);
+        Label player2 = new Label("2", skin);
         player2.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        player3 = new Label("3", skin);
+        Label player3 = new Label("3", skin);
         player3.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        player4 = new Label("4", skin);
+        Label player4 = new Label("4", skin);
         player4.setStyle(new Label.LabelStyle(font72, Color.WHITE));
         nextRoundBtn = new TextButton("Next Round", skin);
 
         //Stage and table for score at end of round
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);//Allow input for stage
-        table = new Table();
+        Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
         table.debug();//Draws the table lines so you can see the actual layout
