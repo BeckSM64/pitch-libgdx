@@ -111,10 +111,18 @@ public class GameScreen implements Screen {
      * Resets deck, player hands, trump, and main card pile for a new round
      */
     private void resetRound() {
+
+        //Reset and dispose of game objects
         trump = null;
         mainPile.dispose();//I think assets need to be disposed before recreating object
-        mainPile = new CardCollection();
         deck.dispose();
+        for(Player player : players) {
+            player.getWonCards().dispose();
+            player.resetWonCards();
+        }
+
+        //Create new game objects and setup game
+        mainPile = new CardCollection();
         deck = new Deck();
         deck.shuffle();
         dealHands();
