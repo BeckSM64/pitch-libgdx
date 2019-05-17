@@ -38,7 +38,7 @@ public class Card {
             this.name = value + "_of_" + suit;
         }
 
-        cardImage = new Texture(this.name + ".png");
+        cardImage = new Texture("cards/" + this.name + ".png");
 
         cardWidth = Gdx.graphics.getWidth() / 6;
         cardHeight = Gdx.graphics.getHeight() / 6;
