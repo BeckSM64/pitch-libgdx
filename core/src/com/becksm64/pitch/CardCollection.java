@@ -15,15 +15,6 @@ public class CardCollection {
         this.cardPile.add(card);
     }
 
-    /* Shows what cards are currently in the pile */
-    public void showCardsInPile() {
-
-        System.out.println("Cards in pile: ");
-        for(int i = 0; i < this.size(); i++) {
-            System.out.println(this.cardPile.get(i).getName());
-        }
-    }
-
     /* Remove the top card in the pile */
     public Card removeCard() {
         return this.cardPile.pop();

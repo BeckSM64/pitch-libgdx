@@ -44,11 +44,6 @@ public class Deck {
         return this.deckOfCards.pop();
     }
 
-    /* Look at the top card and then put it back */
-    public Card peekTopCard() {
-        return this.deckOfCards.peek();
-    }
-
     /* Get specific card from deck based on index */
     public Card viewCard(int index) {
         return this.deckOfCards.get(index);
