@@ -7,6 +7,9 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Card {
 
+    public static final int WIDTH = Gdx.graphics.getWidth() / 6;
+    public static final int HEIGHT = Gdx.graphics.getHeight() / 6;
+
     private String suit;
     private int value;
     private String name;

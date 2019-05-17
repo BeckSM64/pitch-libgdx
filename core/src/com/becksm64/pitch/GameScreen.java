@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
@@ -22,6 +23,11 @@ public class GameScreen implements Screen {
     Deck deck;
     CardCollection mainPile;
     List<Player> players;
+    Texture spadeImage;
+    Texture clubImage;
+    Texture heartImage;
+    Texture diamondImage;
+    Texture trumpImage;//Will change depending on current trump
 
     //Test game logic
     String trump;
@@ -50,6 +56,12 @@ public class GameScreen implements Screen {
         for(int i = 0; i < 4; i ++) {
             players.add(new Player());
         }
+
+        //Create suit textures
+        spadeImage = new Texture("suits/spades.png");
+        clubImage = new Texture("suits/clubs.png");
+        heartImage = new Texture("suits/hearts.png");
+        diamondImage = new Texture("suits/diamonds.png");
 
         //Deal hands
         dealHands();
@@ -121,6 +133,22 @@ public class GameScreen implements Screen {
         numPlays = 0;
         playerTurn = playedBestCard;
         bestCardPlayed = null;
+    }
+
+    /*
+     * Sets the trump texture to the appropriate suit texture to be drawn on screen
+     */
+    private void setTrumpImage() {
+        if(trump != null) {
+            if (trump.equals("spades"))
+                trumpImage = spadeImage;
+            else if (trump.equals("clubs"))
+                trumpImage = clubImage;
+            else if (trump.equals("hearts"))
+                trumpImage = heartImage;
+            else
+                trumpImage = diamondImage;
+        }
     }
 
     @Override
@@ -195,6 +223,11 @@ public class GameScreen implements Screen {
             currentCard.setPosition((Gdx.graphics.getWidth() / 2) - (currentCard.getCardWidth() / 2), (Gdx.graphics.getHeight() / 2) - (currentCard.getCardHeight() / 2));
             batch.draw(currentCard.getCardImage(), currentCard.getPosition().x + (i * 20), currentCard.getPosition().y + (i * 20), currentCard.getCardWidth(), currentCard.getCardHeight());
         }
+
+        //Draw trump image below main pile
+        setTrumpImage();
+        if(trump != null)
+            batch.draw(trumpImage, (Gdx.graphics.getWidth() / 2) - (Card.WIDTH / 2), (Gdx.graphics.getHeight() / 2) - (Card.HEIGHT + Card.HEIGHT / 2), Card.WIDTH, Card.WIDTH);
         batch.end();
 
         //Test playing a card, only if all hands are not empty
