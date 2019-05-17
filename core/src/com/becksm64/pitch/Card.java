@@ -99,7 +99,11 @@ public class Card {
         return this.cardImage;
     }
 
-    public boolean isPlayable(String trump, String currentSuit, int numPlays) {
+    public boolean isPlayable(String trump, String currentSuit, int numPlays, boolean handHasCurrentSuit) {
+
+        if(!handHasCurrentSuit) {
+            return true;
+        }
 
         //check if beginning of round
         if(currentSuit == null && trump == null) {
