@@ -21,13 +21,15 @@ public class GameScreen implements Screen {
 
     Deck deck;
     CardCollection mainPile;
-    List<Hand> hands;
+    List<Player> players;
 
     //Test game logic
     String trump;
     String currentSuit;
     int numPlays;
     int playerTurn;
+    Card bestCardPlayed;
+    int playedBestCard;
 
     OrthographicCamera cam;
 
@@ -44,9 +46,9 @@ public class GameScreen implements Screen {
         mainPile = new CardCollection();//Create the pile which cards are played to
 
         //Add new hands to collection of hands
-        hands = new ArrayList<Hand>();
+        players = new ArrayList<Player>();
         for(int i = 0; i < 4; i ++) {
-            hands.add(new Hand());
+            players.add(new Player());
         }
 
         //Deal hands
@@ -66,7 +68,7 @@ public class GameScreen implements Screen {
      * Return true if all hands are empty, signifying end of round
      */
     private boolean isRoundOver() {
-        if(hands.get(0).isEmpty() && hands.get(1).isEmpty() && hands.get(2).isEmpty() && hands.get(3).isEmpty()) {
+        if(players.get(0).getPlayerHand().isEmpty() && players.get(1).getPlayerHand().isEmpty() && players.get(2).getPlayerHand().isEmpty() && players.get(3).getPlayerHand().isEmpty()) {
             return true;
         } return false;
     }
@@ -75,7 +77,7 @@ public class GameScreen implements Screen {
      * Return true if all players have all their cards
      */
     private boolean isStartOfRound() {
-        if(hands.get(0).isFull() && hands.get(1).isFull() && hands.get(2).isFull() && hands.get(3).isFull()) {
+        if(players.get(0).getPlayerHand().isFull() && players.get(1).getPlayerHand().isFull() && players.get(2).getPlayerHand().isFull() && players.get(3).getPlayerHand().isFull()) {
             return true;
         } else {
             return false;
@@ -87,8 +89,8 @@ public class GameScreen implements Screen {
      */
     private void dealHands() {
         for(int i = 0; i < 6; i++) {
-            for(Hand hand : hands) {
-                hand.addToHand(deck.getTopCard());
+            for(Player player : players) {
+                player.addToHand(deck.getTopCard());
             }
         }
     }
@@ -120,16 +122,16 @@ public class GameScreen implements Screen {
 
         cam.update();//Update camera
 
-        //Update cards in test hands
-        for(Hand hand : hands) {
-            hand.update();
+        //Update cards player hands
+        for(Player player : players) {
+            player.getPlayerHand().update();
         }
 
         batch.begin();
         //Draw all hands
-        for(int i = 0; i < hands.size(); i++) {
+        for(int i = 0; i < players.size(); i++) {
 
-            Hand currentHand = hands.get(i);
+            Hand currentHand = players.get(i).getPlayerHand();
             for(int j = 0; j < currentHand.size(); j++) {
 
                 Card currentCard = currentHand.getCard(j);//Get the current card
@@ -183,10 +185,10 @@ public class GameScreen implements Screen {
             cam.unproject(touchPos);
 
             //Loop through each player
-            for(int i = 0; i < hands.size(); i++) {
+            for(int i = 0; i < players.size(); i++) {
 
                 //Check if player card has been touched
-                Hand currentHand = hands.get(i);
+                Hand currentHand = players.get(i).getPlayerHand();
 
                 //If hand has playable card, only select few cards may be playable
                 if(currentHand.hasCurrentSuitCard(currentSuit)) {
@@ -228,6 +230,12 @@ public class GameScreen implements Screen {
                                 currentSuit = cardToPlay.getSuit();//Test setting currentSuit
                             }
                             //System.out.println("Current Suit: " + currentSuit);
+                            //Check if the card that was just played is the best card
+                            if(mainPile.isBestCard(cardToPlay, trump, currentSuit)) {
+                                bestCardPlayed = cardToPlay;
+                                playedBestCard = playerTurn;
+                            }
+                            System.out.println("Played best card: " + playedBestCard);
                             mainPile.addToPile(cardToPlay);
                             numPlays += 1;//Increment the number of cards played so far this play
                             playerTurn += 1;//Make it the next player's turn
@@ -245,6 +253,8 @@ public class GameScreen implements Screen {
             if(numPlays > 3) {
                 currentSuit = null;//Reset current suit
                 numPlays = 0;
+                playerTurn = playedBestCard;
+                bestCardPlayed = null;
             }
         }
 
@@ -280,8 +290,8 @@ public class GameScreen implements Screen {
 
         batch.dispose();
         deck.dispose();
-        for(int i = 0; i < hands.size(); i++) {
-            hands.get(i).dispose();
+        for(int i = 0; i < players.size(); i++) {
+            players.get(i).getPlayerHand().dispose();
         }
         mainPile.dispose();
     }
