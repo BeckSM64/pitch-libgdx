@@ -7,19 +7,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,19 +37,14 @@ public class GameScreen implements Screen {
     private String currentSuit;
     private int numPlays;
     private int playerTurn;
-    private Card bestCardPlayed;
     private int playedBestCard;
     private boolean calculatedScore;
-    private Label player1Score;
-    private Label player2Score;
-    private Label player3Score;
-    private Label player4Score;
 
     private OrthographicCamera cam;
 
     //Stage and table to display score at the end of round
     private Stage stage;
-    private TextButton nextRoundBtn;
+    private ScoreTable scoreTable;
 
     public GameScreen(Game game) {
 
@@ -82,8 +70,7 @@ public class GameScreen implements Screen {
         heartImage = new Texture("suits/hearts.png");
         diamondImage = new Texture("suits/diamonds.png");
 
-        //Deal hands
-        dealHands();
+        dealHands();//Deal hands
 
         //Game logic
         trump = null;//Starts as null
@@ -95,73 +82,11 @@ public class GameScreen implements Screen {
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        //Generate font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/cour.TTF"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 72;
-        BitmapFont font72 = generator.generateFont(parameter);
-        generator.dispose();//Get rid of generator after done making fonts
-
-        //Create skin for labels and setup labels for scoring at end of round
-        Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-        Label playerTitle = new Label("Player", skin);
-        playerTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        Label highTitle = new Label("High", skin);
-        highTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        Label jackTitle = new Label("Jack", skin);
-        jackTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        Label lowTitle = new Label("Low", skin);
-        lowTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        Label gameTitle = new Label("Game", skin);
-        gameTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        Label totalScoreTitle = new Label("Score", skin);
-        totalScoreTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        Label player1 = new Label("1", skin);
-        player1.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        Label player2 = new Label("2", skin);
-        player2.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        Label player3 = new Label("3", skin);
-        player3.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        Label player4 = new Label("4", skin);
-        player4.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        player1Score = new Label(Integer.toString(players.get(0).getScore()), skin);
-        player1Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        player2Score = new Label(Integer.toString(players.get(1).getScore()), skin);
-        player2Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        player3Score = new Label(Integer.toString(players.get(2).getScore()), skin);
-        player3Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        player4Score = new Label(Integer.toString(players.get(3).getScore()), skin);
-        player4Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        nextRoundBtn = new TextButton("Next Round", skin);
-
         //Stage and table for score at end of round
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);//Allow input for stage
-        Table table = new Table();
-        table.setFillParent(true);
-        stage.addActor(table);
-        table.add(playerTitle).padRight(50);//First row
-        table.add(player1).padRight(50);
-        table.add(player2).padRight(50);
-        table.add(player3).padRight(50);
-        table.add(player4).padRight(50);
-        table.row();
-        table.add(highTitle).padRight(50).align(Align.left);//Second row
-        table.row();
-        table.add(jackTitle).padRight(50).align(Align.left);//Third row
-        table.row();
-        table.add(lowTitle).padRight(50).align(Align.left);//Fourth row
-        table.row();
-        table.add(gameTitle).padRight(50).align(Align.left);//Fifth row
-        table.row();
-        table.add(totalScoreTitle).padRight(50).align(Align.left);//Sixth row
-        table.add(player1Score).padRight(50);
-        table.add(player2Score).padRight(50);
-        table.add(player3Score).padRight(50);
-        table.add(player4Score).padRight(50);
-        table.row();
-        table.add(nextRoundBtn).colspan(5);
-        table.debug();//Draws the table lines so you can see the actual layout
+        scoreTable = new ScoreTable();
+        stage.addActor(scoreTable);//Add score table to stage
     }
 
     /*
@@ -229,7 +154,6 @@ public class GameScreen implements Screen {
         currentSuit = null;//Reset current suit
         numPlays = 0;
         playerTurn = playedBestCard;
-        bestCardPlayed = null;
     }
 
     /*
@@ -249,10 +173,12 @@ public class GameScreen implements Screen {
     }
 
     private void displayScoreTable() {
-        player1Score.setText(Integer.toString(players.get(0).getScore()));
-        player2Score.setText(Integer.toString(players.get(1).getScore()));
-        player3Score.setText(Integer.toString(players.get(2).getScore()));
-        player4Score.setText(Integer.toString(players.get(3).getScore()));
+
+        //Set the appropriate player scores in the score table
+        scoreTable.setPlayer1Score(players.get(0).getScore());
+        scoreTable.setPlayer2Score(players.get(1).getScore());
+        scoreTable.setPlayer3Score(players.get(2).getScore());
+        scoreTable.setPlayer4Score(players.get(3).getScore());
         calculatedScore = true;
         stage.draw();
     }
@@ -372,7 +298,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         //Hand next round button click
-        nextRoundBtn.addListener(new ChangeListener() {
+        scoreTable.getNextRoundBtn().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 resetRound();
@@ -487,7 +413,6 @@ public class GameScreen implements Screen {
                         }
                         //Check if the card that was just played is the best card
                         if(mainPile.isBestCard(cardToPlay, trump, currentSuit)) {
-                            bestCardPlayed = cardToPlay;
                             playedBestCard = playerTurn;
                         }
                         mainPile.addToPile(cardToPlay);
