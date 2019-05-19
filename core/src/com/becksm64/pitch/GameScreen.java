@@ -472,5 +472,11 @@ public class GameScreen implements Screen {
             players.get(i).getPlayerHand().dispose();
         }
         mainPile.dispose();
+        stage.dispose();
+        spadeImage.dispose();
+        heartImage.dispose();
+        diamondImage.dispose();
+        clubImage.dispose();
+        trumpImage.dispose();
     }
 }
