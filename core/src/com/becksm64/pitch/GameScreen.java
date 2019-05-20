@@ -61,7 +61,10 @@ public class GameScreen implements Screen {
         //Add new hands to collection of hands
         players = new ArrayList<Player>();
         for(int i = 0; i < 4; i ++) {
-            players.add(new Player());
+            if(i == 0)
+                players.add(new Player());
+            else
+                players.add(new Enemy());
         }
 
         //Create suit textures
