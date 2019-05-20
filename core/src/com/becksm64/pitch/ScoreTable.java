@@ -84,7 +84,7 @@ public class ScoreTable extends Table {
         this.add(player4Score).padRight(50);
         this.row();
         this.add(nextRoundBtn).colspan(5);
-        this.debug();//Draws the table lines so you can see the actual layout
+        //this.debug();//Draws the table lines so you can see the actual layout
     }
 
     public TextButton getNextRoundBtn() {

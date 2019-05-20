@@ -180,6 +180,8 @@ public class GameScreen implements Screen {
         scoreTable.setPlayer3Score(players.get(2).getScore());
         scoreTable.setPlayer4Score(players.get(3).getScore());
         calculatedScore = true;
+        trump = null;
+        trumpImage = null;
         stage.draw();
     }
 
