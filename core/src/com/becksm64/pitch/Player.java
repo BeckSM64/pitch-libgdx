@@ -72,4 +72,15 @@ public class Player {
     public void resetWonCards() {
         this.cardsWonInRound = new CardCollection();
     }
+
+    public Card takeTurn(String trump, String currentSuit, int numPlays, boolean hasCurrentSuit) {
+
+        for(int i = 0; i < this.hand.size(); i++) {
+            Card currentCard = this.hand.getCard(i);
+            if(currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit)) {
+                Card cardToPlay = this.playCard(i);
+                return cardToPlay;
+            }
+        } return null;//Should never reach this point
+    }
 }

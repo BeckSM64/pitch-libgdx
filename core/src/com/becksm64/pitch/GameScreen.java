@@ -46,6 +46,9 @@ public class GameScreen implements Screen {
     private Stage stage;
     private ScoreTable scoreTable;
 
+    private float timeSeconds = 0f;
+    private float period = 1f;
+
     public GameScreen(Game game) {
 
         this.game = game;
@@ -61,10 +64,7 @@ public class GameScreen implements Screen {
         //Add new hands to collection of hands
         players = new ArrayList<Player>();
         for(int i = 0; i < 4; i ++) {
-            if(i == 0)
-                players.add(new Player());
-            else
-                players.add(new Enemy());
+            players.add(new Player());
         }
 
         //Create suit textures
@@ -130,6 +130,7 @@ public class GameScreen implements Screen {
 
         //Reset and dispose of game objects
         trump = null;
+        currentSuit = null;
         calculatedScore = false;
         mainPile.dispose();//I think assets need to be disposed before recreating object
         deck.dispose();
@@ -334,9 +335,8 @@ public class GameScreen implements Screen {
 
                 Card currentCard = currentHand.getCard(j);//Get the current card
                 boolean hasCurrentSuit = false;
-                if(currentHand.hasCurrentSuitCard(currentSuit)) {
+                if(currentHand.hasCurrentSuitCard(currentSuit))
                     hasCurrentSuit = true;
-                }
 
                 //Draw a card with transparency if it isn't a playable card
                 if(currentHand.hasCurrentSuitCard(currentSuit)) {
@@ -385,59 +385,87 @@ public class GameScreen implements Screen {
             batch.draw(trumpImage, (Gdx.graphics.getWidth() / 2) - (Card.WIDTH / 2), (Gdx.graphics.getHeight() / 2) - (Card.HEIGHT + Card.HEIGHT / 2), Card.WIDTH, Card.WIDTH);
         batch.end();
 
-        //Test playing a card, only if all hands are not empty
-        if(Gdx.input.justTouched() && !isRoundOver()) {
-
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            cam.unproject(touchPos);
-
-            //Loop through each player
-            for(int i = 0; i < players.size(); i++) {
+        if(!isRoundOver()) {
+            for (int i = 0; i < players.size(); i++) {
 
                 //Check if player card has been touched
                 Hand currentHand = players.get(i).getPlayerHand();
 
                 //If hand has playable card, only select few cards may be playable\
                 boolean hasCurrentSuit = false;
-                if(currentHand.hasCurrentSuitCard(currentSuit)) {
+                if (currentHand.hasCurrentSuitCard(currentSuit))
                     hasCurrentSuit = true;
-                }
-                for (int j = 0; j < currentHand.size(); j++) {
 
-                    Card currentCard = currentHand.getCard(j);
+                //If it is player 1's turn
+                if (i == 0 && playerTurn == i) {
+                    if (Gdx.input.justTouched()) {
 
-                    //Only play card if it was touched, is playable, and it is that player's turn
-                    if (currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit) && playerTurn == i) {
+                        touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                        cam.unproject(touchPos);
 
-                        if (isStartOfRound()) {
-                            trump = currentCard.getSuit();
+                        for (int j = 0; j < currentHand.size(); j++) {
+
+                            Card currentCard = currentHand.getCard(j);
+
+                            //Only play card if it was touched, is playable, and it is that player's turn
+                            if (currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit)) {
+
+                                if (isStartOfRound())
+                                    trump = currentCard.getSuit();
+
+                                Card cardToPlay = currentHand.playCard(j);
+                                if (numPlays == 0)
+                                    currentSuit = cardToPlay.getSuit();//Test setting currentSuit
+
+                                //Check if the card that was just played is the best card
+                                if (mainPile.isBestCard(cardToPlay, trump, currentSuit))
+                                    playedBestCard = playerTurn;
+
+                                mainPile.addToPile(cardToPlay);
+
+                                if (numPlays != 3)
+                                    playerTurn += 1;//Make it the next player's turn
+                                numPlays += 1;//Increment the number of cards played so far this play
+                            }
                         }
-                        Card cardToPlay = currentHand.playCard(j);
-                        if (numPlays == 0) {
-                            currentSuit = cardToPlay.getSuit();//Test setting currentSuit
-                        }
+                    }
+                } else if (i != 0 && playerTurn == i) {
+
+                    timeSeconds += Gdx.graphics.getRawDeltaTime();//Wait specified amount of time until opponent takes their turn
+                    if (timeSeconds > period) {
+
+                        timeSeconds -= period;
+
+                        Player player = players.get(i);
+                        Card cardPlayed = player.takeTurn(trump, currentSuit, numPlays, hasCurrentSuit);
+
+                        if (isStartOfRound())
+                            trump = cardPlayed.getSuit();
+
+                        if (numPlays == 0)
+                            currentSuit = cardPlayed.getSuit();//Test setting currentSuit
+
                         //Check if the card that was just played is the best card
-                        if(mainPile.isBestCard(cardToPlay, trump, currentSuit)) {
+                        if (mainPile.isBestCard(cardPlayed, trump, currentSuit))
                             playedBestCard = playerTurn;
-                        }
-                        mainPile.addToPile(cardToPlay);
-                        if(numPlays != 3)
+
+                        mainPile.addToPile(cardPlayed);
+
+                        if (numPlays != 3)
                             playerTurn += 1;//Make it the next player's turn
                         numPlays += 1;//Increment the number of cards played so far this play
                     }
                 }
             }
-
-            //Check if all player's have gone
-            if(playerTurn > 3) {
-                playerTurn = 0;//Go back to first player
-            }
-
-            //Check if play is over, after all four players have gone
-            if(numPlays > 3) {
-                resetPlay();
-            }
         }
+
+        //Check if all player's have gone
+        if(playerTurn > 3)
+            playerTurn = 0;//Go back to first player
+
+        //Check if play is over, after all four players have gone
+        if(numPlays > 3)
+            resetPlay();
 
         //When round is over, start a new round
         if(isRoundOver()) {
