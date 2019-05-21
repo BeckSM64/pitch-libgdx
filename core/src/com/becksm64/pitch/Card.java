@@ -118,15 +118,6 @@ public class Card {
             return true;
         }
 
-        //Check if trump and current suit are the same
-        if(trump.equals(currentSuit)) {
-            if(this.suit.equals(trump)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
         //If card suit is trump, then can be played no matter what
         if(this.suit.equals(trump)) {
             return true;

@@ -340,6 +340,8 @@ public class GameScreen implements Screen {
 
                 //Draw a card with transparency if it isn't a playable card
                 if(currentHand.hasCurrentSuitCard(currentSuit)) {
+                    //System.out.println(currentSuit);
+                    //System.out.println(trump);
                     if (currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit)) {
                         Color c = batch.getColor();
                         batch.setColor(c.r, c.g, c.b, 1);
@@ -439,7 +441,7 @@ public class GameScreen implements Screen {
                         Player player = players.get(i);
                         Card cardPlayed = player.takeTurn(trump, currentSuit, numPlays, hasCurrentSuit);
 
-                        if (isStartOfRound())
+                        if (trump == null)
                             trump = cardPlayed.getSuit();
 
                         if (numPlays == 0)
