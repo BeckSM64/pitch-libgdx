@@ -7,8 +7,9 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Card {
 
-    public static final int WIDTH = Gdx.graphics.getWidth() / 6;
-    public static final int HEIGHT = Gdx.graphics.getHeight() / 6;
+    static final int WIDTH = Gdx.graphics.getWidth() / 6;
+    static final int HEIGHT = Gdx.graphics.getHeight() / 6;
+    static final Texture backCardImage = new Texture("cards/back.png");
 
     private String suit;
     private int value;
