@@ -16,6 +16,22 @@ public class ScoreTable extends Table {
     private Label player2Score;
     private Label player3Score;
     private Label player4Score;
+    private Label player1High;
+    private Label player2High;
+    private Label player3High;
+    private Label player4High;
+    private Label player1Jack;
+    private Label player2Jack;
+    private Label player3Jack;
+    private Label player4Jack;
+    private Label player1Low;
+    private Label player2Low;
+    private Label player3Low;
+    private Label player4Low;
+    private Label player1Game;
+    private Label player2Game;
+    private Label player3Game;
+    private Label player4Game;
     private TextButton nextRoundBtn;
 
     public ScoreTable() {
@@ -59,6 +75,38 @@ public class ScoreTable extends Table {
         player3Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
         player4Score = new Label("0", skin);
         player4Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player1High = new Label("-", skin);
+        player1High.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player2High = new Label("-", skin);
+        player2High.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player3High = new Label("-", skin);
+        player3High.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player4High = new Label("-", skin);
+        player4High.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player1Jack = new Label("-", skin);
+        player1Jack.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player2Jack = new Label("-", skin);
+        player2Jack.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player3Jack = new Label("-", skin);
+        player3Jack.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player4Jack = new Label("-", skin);
+        player4Jack.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player1Low = new Label("-", skin);
+        player1Low.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player2Low = new Label("-", skin);
+        player2Low.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player3Low = new Label("-", skin);
+        player3Low.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player4Low = new Label("-", skin);
+        player4Low.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player1Game = new Label("-", skin);
+        player1Game.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player2Game = new Label("-", skin);
+        player2Game.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player3Game = new Label("-", skin);
+        player3Game.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player4Game = new Label("-", skin);
+        player4Game.setStyle(new Label.LabelStyle(font72, Color.WHITE));
         nextRoundBtn = new TextButton("Next Round", skin);
 
         //Add labels to table
@@ -70,12 +118,28 @@ public class ScoreTable extends Table {
         this.add(player4).padRight(50);
         this.row();
         this.add(highTitle).padRight(50).align(Align.left);//Second row
+        this.add(player1High).padRight(50);
+        this.add(player2High).padRight(50);
+        this.add(player3High).padRight(50);
+        this.add(player4High).padRight(50);
         this.row();
         this.add(jackTitle).padRight(50).align(Align.left);//Third row
+        this.add(player1Jack).padRight(50);
+        this.add(player2Jack).padRight(50);
+        this.add(player3Jack).padRight(50);
+        this.add(player4Jack).padRight(50);
         this.row();
         this.add(lowTitle).padRight(50).align(Align.left);//Fourth row
+        this.add(player1Low).padRight(50);
+        this.add(player2Low).padRight(50);
+        this.add(player3Low).padRight(50);
+        this.add(player4Low).padRight(50);
         this.row();
         this.add(gameTitle).padRight(50).align(Align.left);//Fifth row
+        this.add(player1Game).padRight(50);
+        this.add(player2Game).padRight(50);
+        this.add(player3Game).padRight(50);
+        this.add(player4Game).padRight(50);
         this.row();
         this.add(totalScoreTitle).padRight(50).align(Align.left);//Sixth row
         this.add(player1Score).padRight(50);
@@ -84,7 +148,6 @@ public class ScoreTable extends Table {
         this.add(player4Score).padRight(50);
         this.row();
         this.add(nextRoundBtn).colspan(5);
-        //this.debug();//Draws the table lines so you can see the actual layout
     }
 
     public TextButton getNextRoundBtn() {
@@ -105,5 +168,70 @@ public class ScoreTable extends Table {
 
     public void setPlayer4Score(int player4Score) {
         this.player4Score.setText(Integer.toString(player4Score));
+    }
+
+    public void setPlayerHigh(int playerIndex) {
+        if(playerIndex == 0)
+            this.player1High.setText("1");
+        else if(playerIndex == 1)
+            this.player2High.setText("1");
+        else if(playerIndex == 2)
+            this.player3High.setText("1");
+        else
+            this.player4High.setText("1");
+    }
+
+    public void setPlayerJack(int playerIndex) {
+        if(playerIndex >= 0) {
+            if (playerIndex == 0)
+                this.player1Jack.setText("1");
+            else if (playerIndex == 1)
+                this.player2Jack.setText("1");
+            else if (playerIndex == 2)
+                this.player3Jack.setText("1");
+            else
+                this.player4Jack.setText("1");
+        }
+    }
+
+    public void setPlayerLow(int playerIndex) {
+        if(playerIndex == 0)
+            this.player1Low.setText("1");
+        else if(playerIndex == 1)
+            this.player2Low.setText("1");
+        else if(playerIndex == 2)
+            this.player3Low.setText("1");
+        else
+            this.player4Low.setText("1");
+    }
+
+    public void setPlayerGame(int playerIndex) {
+        if(playerIndex == 0)
+            this.player1Game.setText("1");
+        else if(playerIndex == 1)
+            this.player2Game.setText("1");
+        else if(playerIndex == 2)
+            this.player3Game.setText("1");
+        else
+            this.player4Game.setText("1");
+    }
+
+    public void resetPointLabels() {
+        this.player1High.setText("-");
+        this.player2High.setText("-");
+        this.player3High.setText("-");
+        this.player4High.setText("-");
+        this.player1Jack.setText("-");
+        this.player2Jack.setText("-");
+        this.player3Jack.setText("-");
+        this.player4Jack.setText("-");
+        this.player1Low.setText("-");
+        this.player2Low.setText("-");
+        this.player3Low.setText("-");
+        this.player4Low.setText("-");
+        this.player1Game.setText("-");
+        this.player2Game.setText("-");
+        this.player3Game.setText("-");
+        this.player4Game.setText("-");
     }
 }

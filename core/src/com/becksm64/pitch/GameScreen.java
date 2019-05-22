@@ -41,6 +41,12 @@ public class GameScreen implements Screen {
     private int playedBestCard;
     private boolean calculatedScore;
 
+    //Scoring
+    private int highPoint;
+    private int jackPoint;
+    private int lowPoint;
+    private int gamePoint;
+
     private OrthographicCamera cam;
 
     //Stage and table to display score at the end of round
@@ -141,8 +147,10 @@ public class GameScreen implements Screen {
             player.getWonCards().dispose();
             player.resetWonCards();
         }
+        jackPoint = -1;//Jack may not always be out so make sure point doesn't get set by accident
 
         //Create new game objects and setup game
+        scoreTable.resetPointLabels();
         mainPile = new CardCollection();
         deck = new Deck();
         deck.shuffle();
@@ -186,6 +194,12 @@ public class GameScreen implements Screen {
         scoreTable.setPlayer2Score(players.get(1).getScore());
         scoreTable.setPlayer3Score(players.get(2).getScore());
         scoreTable.setPlayer4Score(players.get(3).getScore());
+
+        scoreTable.setPlayerHigh(highPoint);
+        scoreTable.setPlayerJack(jackPoint);
+        scoreTable.setPlayerLow(lowPoint);
+        scoreTable.setPlayerGame(gamePoint);
+
         calculatedScore = true;
         arrowImage = null;
         trump = null;
@@ -279,21 +293,25 @@ public class GameScreen implements Screen {
             //See if player was lowest trump holder
             if(hadLowestTrump == i) {
                 pointsToAward += 1;
+                lowPoint = i;
             }
 
             //See if player was highest trump holder
             if(hadHighestTrump == i) {
                 pointsToAward += 1;
+                highPoint = i;
             }
 
             //See if this player had the jack
             if(currentPlayer.getWonCards().hasTrumpJack(trump)) {
                 pointsToAward += 1;
+                jackPoint = i;
             }
 
             //See if this player got game point
             if(hadGamePoint == i) {
                 pointsToAward += 1;
+                gamePoint = i;
             }
 
             //Check to make sure player met their bid before awarding points
