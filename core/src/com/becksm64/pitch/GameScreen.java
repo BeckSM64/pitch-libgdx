@@ -31,6 +31,7 @@ public class GameScreen implements Screen {
     private Texture heartImage;
     private Texture diamondImage;
     private Texture trumpImage;//Will change depending on current trump
+    private Texture arrowImage;
 
     //Test game logic
     private String trump;
@@ -72,6 +73,7 @@ public class GameScreen implements Screen {
         clubImage = new Texture("suits/clubs.png");
         heartImage = new Texture("suits/hearts.png");
         diamondImage = new Texture("suits/diamonds.png");
+        arrowImage = new Texture("arrow.png");//Arrow image to point to player whose turn it is
 
         dealHands();//Deal hands
 
@@ -134,6 +136,7 @@ public class GameScreen implements Screen {
         calculatedScore = false;
         mainPile.dispose();//I think assets need to be disposed before recreating object
         deck.dispose();
+        arrowImage = new Texture("arrow.png");
         for(Player player : players) {
             player.getWonCards().dispose();
             player.resetWonCards();
@@ -184,6 +187,7 @@ public class GameScreen implements Screen {
         scoreTable.setPlayer3Score(players.get(2).getScore());
         scoreTable.setPlayer4Score(players.get(3).getScore());
         calculatedScore = true;
+        arrowImage = null;
         trump = null;
         trumpImage = null;
         stage.draw();
@@ -326,7 +330,20 @@ public class GameScreen implements Screen {
             player.getPlayerHand().update();
         }
 
-        batch.begin();
+        batch.begin();//Start drawing
+
+        //Draw arrow to point to player whose turn it is
+        if(arrowImage != null) {
+            if (playerTurn == 0)
+                batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2) - (Card.WIDTH / 2), (Gdx.graphics.getHeight() / 2) - Card.HEIGHT, Card.WIDTH / 2, Card.WIDTH / 2, Card.WIDTH, Card.WIDTH, 1, 1, 0);
+            else if (playerTurn == 1)
+                batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2) - Card.HEIGHT, (Gdx.graphics.getHeight() / 2) - (Card.WIDTH / 2), Card.WIDTH / 2, Card.WIDTH / 2, Card.WIDTH, Card.WIDTH, 1, 1, 270);
+            else if (playerTurn == 2)
+                batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2) - (Card.WIDTH / 2), (Gdx.graphics.getHeight() / 2) + Card.WIDTH, Card.WIDTH / 2, Card.WIDTH / 2, Card.WIDTH, Card.WIDTH, 1, 1, 180);
+            else
+                batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2) + (Card.HEIGHT / 2), (Gdx.graphics.getHeight() / 2) - (Card.WIDTH / 2), Card.WIDTH / 2, Card.WIDTH / 2, Card.WIDTH, Card.WIDTH, 1, 1, 90);
+        }
+
         //Draw all hands
         for(int i = 0; i < players.size(); i++) {
 
@@ -384,7 +401,8 @@ public class GameScreen implements Screen {
         //Draw trump image below main pile
         setTrumpImage();
         if(trump != null)
-            batch.draw(trumpImage, (Gdx.graphics.getWidth() / 2) - (Card.WIDTH / 2), (Gdx.graphics.getHeight() / 2) - (Card.HEIGHT + Card.HEIGHT / 2), Card.WIDTH, Card.WIDTH);
+            batch.draw(trumpImage, (Gdx.graphics.getWidth() / 2) - (Card.WIDTH / 2), (Gdx.graphics.getHeight() / 2) +
+                    (Card.HEIGHT + Card.HEIGHT / 2), Card.WIDTH, Card.WIDTH);
         batch.end();
 
         if(!isRoundOver()) {
@@ -513,6 +531,7 @@ public class GameScreen implements Screen {
         diamondImage.dispose();
         clubImage.dispose();
         trumpImage.dispose();
+        arrowImage.dispose();
         Card.backCardImage.dispose();
     }
 }
