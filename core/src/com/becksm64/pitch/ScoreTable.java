@@ -39,115 +39,120 @@ public class ScoreTable extends Table {
         //Generate font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/cour.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 72;
-        BitmapFont font72 = generator.generateFont(parameter);
+        parameter.size = (int) (30 * Gdx.graphics.getDensity());
+        BitmapFont font = generator.generateFont(parameter);
         generator.dispose();//Get rid of generator after done making fonts
+        int padding = (int) (12 * Gdx.graphics.getDensity());
+        System.out.println(padding);
 
         //Create skin for labels for score table
         Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
         Label playerTitle = new Label("Player", skin);
-        playerTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        playerTitle.setStyle(new Label.LabelStyle(font, Color.WHITE));
         Label highTitle = new Label("High", skin);
-        highTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        highTitle.setStyle(new Label.LabelStyle(font, Color.WHITE));
         Label jackTitle = new Label("Jack", skin);
-        jackTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        jackTitle.setStyle(new Label.LabelStyle(font, Color.WHITE));
         Label lowTitle = new Label("Low", skin);
-        lowTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        lowTitle.setStyle(new Label.LabelStyle(font, Color.WHITE));
         Label gameTitle = new Label("Game", skin);
-        gameTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        gameTitle.setStyle(new Label.LabelStyle(font, Color.WHITE));
         Label totalScoreTitle = new Label("Score", skin);
-        totalScoreTitle.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        totalScoreTitle.setStyle(new Label.LabelStyle(font, Color.WHITE));
         Label player1 = new Label("1", skin);
-        player1.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player1.setStyle(new Label.LabelStyle(font, Color.WHITE));
         Label player2 = new Label("2", skin);
-        player2.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player2.setStyle(new Label.LabelStyle(font, Color.WHITE));
         Label player3 = new Label("3", skin);
-        player3.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player3.setStyle(new Label.LabelStyle(font, Color.WHITE));
         Label player4 = new Label("4", skin);
-        player4.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player4.setStyle(new Label.LabelStyle(font, Color.WHITE));
 
         //Create labels for player scores to be displayed
         player1Score = new Label("0", skin);
-        player1Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player1Score.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player2Score = new Label("0", skin);
-        player2Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player2Score.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player3Score = new Label("0", skin);
-        player3Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player3Score.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player4Score = new Label("0", skin);
-        player4Score.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player4Score.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player1High = new Label("-", skin);
-        player1High.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player1High.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player2High = new Label("-", skin);
-        player2High.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player2High.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player3High = new Label("-", skin);
-        player3High.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player3High.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player4High = new Label("-", skin);
-        player4High.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player4High.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player1Jack = new Label("-", skin);
-        player1Jack.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player1Jack.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player2Jack = new Label("-", skin);
-        player2Jack.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player2Jack.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player3Jack = new Label("-", skin);
-        player3Jack.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player3Jack.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player4Jack = new Label("-", skin);
-        player4Jack.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player4Jack.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player1Low = new Label("-", skin);
-        player1Low.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player1Low.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player2Low = new Label("-", skin);
-        player2Low.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player2Low.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player3Low = new Label("-", skin);
-        player3Low.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player3Low.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player4Low = new Label("-", skin);
-        player4Low.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player4Low.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player1Game = new Label("-", skin);
-        player1Game.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player1Game.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player2Game = new Label("-", skin);
-        player2Game.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player2Game.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player3Game = new Label("-", skin);
-        player3Game.setStyle(new Label.LabelStyle(font72, Color.WHITE));
+        player3Game.setStyle(new Label.LabelStyle(font, Color.WHITE));
         player4Game = new Label("-", skin);
-        player4Game.setStyle(new Label.LabelStyle(font72, Color.WHITE));
-        nextRoundBtn = new TextButton("Next Round", skin);
+        player4Game.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+        style.font = font;
+        style.fontColor = Color.BLACK;
+        nextRoundBtn = new TextButton("Next Round", style);
 
         //Add labels to table
         this.setFillParent(true);
-        this.add(playerTitle).padRight(50);//First row
-        this.add(player1).padRight(50);
-        this.add(player2).padRight(50);
-        this.add(player3).padRight(50);
-        this.add(player4).padRight(50);
+        this.add(playerTitle).padRight(padding);//First row
+        this.add(player1).padRight(padding);
+        this.add(player2).padRight(padding);
+        this.add(player3).padRight(padding);
+        this.add(player4).padRight(padding);
         this.row();
-        this.add(highTitle).padRight(50).align(Align.left);//Second row
-        this.add(player1High).padRight(50);
-        this.add(player2High).padRight(50);
-        this.add(player3High).padRight(50);
-        this.add(player4High).padRight(50);
+        this.add(highTitle).padRight(padding).align(Align.left);//Second row
+        this.add(player1High).padRight(padding);
+        this.add(player2High).padRight(padding);
+        this.add(player3High).padRight(padding);
+        this.add(player4High).padRight(padding);
         this.row();
-        this.add(jackTitle).padRight(50).align(Align.left);//Third row
-        this.add(player1Jack).padRight(50);
-        this.add(player2Jack).padRight(50);
-        this.add(player3Jack).padRight(50);
-        this.add(player4Jack).padRight(50);
+        this.add(jackTitle).padRight(padding).align(Align.left);//Third row
+        this.add(player1Jack).padRight(padding);
+        this.add(player2Jack).padRight(padding);
+        this.add(player3Jack).padRight(padding);
+        this.add(player4Jack).padRight(padding);
         this.row();
-        this.add(lowTitle).padRight(50).align(Align.left);//Fourth row
-        this.add(player1Low).padRight(50);
-        this.add(player2Low).padRight(50);
-        this.add(player3Low).padRight(50);
-        this.add(player4Low).padRight(50);
+        this.add(lowTitle).padRight(padding).align(Align.left);//Fourth row
+        this.add(player1Low).padRight(padding);
+        this.add(player2Low).padRight(padding);
+        this.add(player3Low).padRight(padding);
+        this.add(player4Low).padRight(padding);
         this.row();
-        this.add(gameTitle).padRight(50).align(Align.left);//Fifth row
-        this.add(player1Game).padRight(50);
-        this.add(player2Game).padRight(50);
-        this.add(player3Game).padRight(50);
-        this.add(player4Game).padRight(50);
+        this.add(gameTitle).padRight(padding).align(Align.left);//Fifth row
+        this.add(player1Game).padRight(padding);
+        this.add(player2Game).padRight(padding);
+        this.add(player3Game).padRight(padding);
+        this.add(player4Game).padRight(padding);
         this.row();
-        this.add(totalScoreTitle).padRight(50).align(Align.left);//Sixth row
-        this.add(player1Score).padRight(50);
-        this.add(player2Score).padRight(50);
-        this.add(player3Score).padRight(50);
-        this.add(player4Score).padRight(50);
+        this.add(totalScoreTitle).padRight(padding).align(Align.left);//Sixth row
+        this.add(player1Score).padRight(padding);
+        this.add(player2Score).padRight(padding);
+        this.add(player3Score).padRight(padding);
+        this.add(player4Score).padRight(padding);
         this.row();
-        this.add(nextRoundBtn).colspan(5);
+        this.add(nextRoundBtn).colspan(5).padTop(padding);
     }
 
     public TextButton getNextRoundBtn() {

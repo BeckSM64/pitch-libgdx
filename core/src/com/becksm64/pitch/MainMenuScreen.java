@@ -22,7 +22,7 @@ public class MainMenuScreen implements Screen {
     OrthographicCamera cam;
     Stage stage;
     Table table;
-    BitmapFont font72, font150;
+    BitmapFont font1, font2;
     TextButton startButton;
     TextButton.TextButtonStyle buttonStyle;
     Label gameTitle;
@@ -36,10 +36,10 @@ public class MainMenuScreen implements Screen {
         //Font that is scalable
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/cour.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 72;
-        font72 = generator.generateFont(parameter);
-        parameter.size = 150;//Make second font different size
-        font150 = generator.generateFont(parameter);
+        parameter.size = (int) (50 * Gdx.graphics.getDensity());
+        font1 = generator.generateFont(parameter);
+        parameter.size = (int) (123 * Gdx.graphics.getDensity());//Make second font different size
+        font2 = generator.generateFont(parameter);
         generator.dispose();//Get rid of generator after done making fonts
 
         //Table and stage stuff
@@ -52,11 +52,11 @@ public class MainMenuScreen implements Screen {
         //Create menu buttons and game title
         Gdx.input.setInputProcessor(stage);
         buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.font = font72;
+        buttonStyle.font = font1;
         startButton = new TextButton("Start", buttonStyle);
         Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
         gameTitle = new Label("Pitch", skin);
-        gameTitle.setStyle(new Label.LabelStyle(font150, Color.WHITE));
+        gameTitle.setStyle(new Label.LabelStyle(font2, Color.WHITE));
 
         //Add buttons and labels to the table
         table.add(gameTitle);
