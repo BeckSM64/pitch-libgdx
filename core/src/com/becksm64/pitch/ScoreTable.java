@@ -43,7 +43,6 @@ public class ScoreTable extends Table {
         BitmapFont font = generator.generateFont(parameter);
         generator.dispose();//Get rid of generator after done making fonts
         int padding = (int) (12 * Gdx.graphics.getDensity());
-        System.out.println(padding);
 
         //Create skin for labels for score table
         Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
