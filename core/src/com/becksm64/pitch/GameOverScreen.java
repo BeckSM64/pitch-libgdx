@@ -8,10 +8,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class GameOverScreen implements Screen {
 
@@ -21,6 +24,8 @@ public class GameOverScreen implements Screen {
     private BitmapFont font2;
     private Stage stage;
     private Table table;
+    private TextButton newGameBtn;
+    private TextButton quitBtn;
 
     public GameOverScreen(Game game, int winner) {
 
@@ -36,6 +41,7 @@ public class GameOverScreen implements Screen {
         parameter.size = (int) (25 * Gdx.graphics.getDensity());
         font2 = generator.generateFont(parameter);
         generator.dispose();//Get rid of generator after done making fonts
+        int padding = (int) (100 * Gdx.graphics.getDensity());
 
         //Stage and table for layout
         stage = new Stage();
@@ -48,17 +54,47 @@ public class GameOverScreen implements Screen {
         gameOverLabel.setStyle(new Label.LabelStyle(font, Color.WHITE));
         winnerLabel.setStyle(new Label.LabelStyle(font2, Color.WHITE));
 
+        //Buttons
+        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+        style.font = font2;
+        newGameBtn = new TextButton("NEW GAME", style);
+        quitBtn = new TextButton("QUIT", style);
+
         //Add everything to table and stage
         table.add(gameOverLabel);
         table.row();//Next row
-        table.add(winnerLabel);
+        table.add(winnerLabel).padBottom(padding);
+        table.row();
+        table.add(newGameBtn);
+        table.row();
+        table.add(quitBtn);
         table.setFillParent(true);
+        Gdx.input.setInputProcessor(stage);
         stage.addActor(table);
     }
 
     @Override
     public void show() {
 
+        //Starts new game when clicked
+        newGameBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                dispose();
+                game.setScreen(new GameScreen(game));
+            }
+        });
+
+        //Quits the app when clicked
+        quitBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                dispose();
+                game.dispose();
+                Gdx.app.exit();
+                System.exit(0);
+            }
+        });
     }
 
     @Override
@@ -96,5 +132,6 @@ public class GameOverScreen implements Screen {
     public void dispose() {
         stage.dispose();
         font.dispose();
+        font2.dispose();
     }
 }

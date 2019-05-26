@@ -367,7 +367,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         cam.update();//Update camera
-        //bidStage.draw();
 
         if(!isRoundOver()) {
             //Update cards player hands
@@ -585,6 +584,5 @@ public class GameScreen implements Screen {
             trumpImage.dispose();
         if(arrowImage != null)
             arrowImage.dispose();
-        Card.backCardImage.dispose();
     }
 }
