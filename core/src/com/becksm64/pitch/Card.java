@@ -19,6 +19,7 @@ public class Card {
     private int cardHeight;
     private Rectangle bounds;
     private Vector3 position;
+    private int rotation;
 
     /*
      * Constructor that takes the suit and value of the card to be created
@@ -130,6 +131,14 @@ public class Card {
         } else {
             return false;
         }
+    }
+
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
     }
 
     public void dispose() {

@@ -521,14 +521,17 @@ public class GameScreen implements Screen {
                     } else if(i == 1) {
 
                         currentCard.setPosition(0 - (currentCard.getCardWidth() / 2), (Gdx.graphics.getHeight() / 3.5f) + (Gdx.graphics.getHeight() / 16 * j));
+                        currentCard.setRotation(270);
                         batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2, currentCard.getCardHeight() / 2, currentCard.getCardWidth(), currentCard.getCardHeight(), 1, 1, 270);
                     } else if(i == 2) {
 
                         currentCard.setPosition((Gdx.graphics.getWidth() / 6) + (Gdx.graphics.getWidth() / 10) * j, Gdx.graphics.getHeight() - (currentCard.getCardHeight() / 2));
+                        currentCard.setRotation(180);
                         batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2, currentCard.getCardHeight() / 2, currentCard.getCardWidth(), currentCard.getCardHeight(), 1, 1, 180);
                     } else {
 
                         currentCard.setPosition(Gdx.graphics.getWidth() - (currentCard.getCardWidth() / 2), (Gdx.graphics.getHeight() / 3.5f) + (Gdx.graphics.getHeight() / 16 * j));
+                        currentCard.setRotation(90);
                         batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2, currentCard.getCardHeight() / 2, currentCard.getCardWidth(), currentCard.getCardHeight(), 1, 1, 90);
                     }
                 }
@@ -542,7 +545,8 @@ public class GameScreen implements Screen {
             for(int i = 0; i < mainPile.size(); i++) {
                 Card currentCard = mainPile.getCard(i);
                 currentCard.setPosition((Gdx.graphics.getWidth() / 2) - (currentCard.getCardWidth() / 2), (Gdx.graphics.getHeight() / 2) - (currentCard.getCardHeight() / 2));
-                batch.draw(currentCard.getCardImage(), currentCard.getPosition().x + (i * 20), currentCard.getPosition().y + (i * 20), currentCard.getCardWidth(), currentCard.getCardHeight());
+                //batch.draw(currentCard.getCardImage(), currentCard.getPosition().x + (i * 20), currentCard.getPosition().y + (i * 20), currentCard.getCardWidth(), currentCard.getCardHeight());
+                batch.draw(new TextureRegion(currentCard.getCardImage()), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2, currentCard.getCardHeight() / 2, currentCard.getCardWidth() / 1.5f, currentCard.getCardHeight() / 1.5f, 1, 1, currentCard.getRotation());
             }
 
             //Draw trump image below main pile
