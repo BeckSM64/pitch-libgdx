@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import java.util.ArrayList;
@@ -56,10 +55,8 @@ public class GameScreen implements Screen {
 
     private OrthographicCamera cam;
 
-    //Stage and table to display score at the end of round
-    private Stage stage;
+    //Table to display score at the end of round
     private ScoreTable scoreTable;
-    private Stage bidStage;
     private BidTable bidTable;
 
     private float timeSeconds = 0f;
@@ -107,22 +104,17 @@ public class GameScreen implements Screen {
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        //Stage and table for score at end of round
-        stage = new Stage();
-        //Gdx.input.setInputProcessor(stage);//Allow input for stage
+        //Table for score at end of round
         scoreTable = new ScoreTable();
-        stage.addActor(scoreTable);//Add score table to stage
 
-        //Stage and table for taking bid at the beginning of the round
-        bidStage = new Stage();
+        //Table for taking bid at the beginning of the round
         bidTable = new BidTable();
-        bidStage.addActor(bidTable);
 
         //Set input processors for stages
         InputMultiplexer multiplexer = new InputMultiplexer();
         Gdx.input.setInputProcessor(multiplexer);
-        multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(bidStage);
+        multiplexer.addProcessor(scoreTable.getStage());
+        multiplexer.addProcessor(bidTable.getStage());
     }
 
     /*
@@ -252,7 +244,7 @@ public class GameScreen implements Screen {
         arrowImage = null;
         trump = null;
         trumpImage = null;
-        stage.draw();
+        scoreTable.getStage().draw();
     }
 
     /*
@@ -374,7 +366,7 @@ public class GameScreen implements Screen {
 
         //Take player bid
         if(currentBidder == 0) {
-            bidStage.draw();
+            bidTable.getStage().draw();
         }
 
         //Take computer bids
@@ -686,8 +678,8 @@ public class GameScreen implements Screen {
             players.get(i).getPlayerHand().dispose();
         }
         mainPile.dispose();
-        stage.dispose();
-        bidStage.dispose();
+        scoreTable.dispose();
+        bidTable.dispose();
         spadeImage.dispose();
         heartImage.dispose();
         diamondImage.dispose();

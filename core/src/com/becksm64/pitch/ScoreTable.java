@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.utils.Align;
 
 public class ScoreTable extends Table {
 
+    private Stage stage;
     private Label player1Score;
     private Label player2Score;
     private Label player3Score;
@@ -35,6 +37,8 @@ public class ScoreTable extends Table {
     private TextButton nextRoundBtn;
 
     public ScoreTable() {
+
+        stage = new Stage();//Create stage for table
 
         //Generate font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/cour.TTF"));
@@ -152,6 +156,8 @@ public class ScoreTable extends Table {
         this.add(player4Score).padRight(padding);
         this.row();
         this.add(nextRoundBtn).colspan(5).padTop(padding);
+
+        stage.addActor(this);
     }
 
     public TextButton getNextRoundBtn() {
@@ -237,5 +243,13 @@ public class ScoreTable extends Table {
         this.player2Game.setText("-");
         this.player3Game.setText("-");
         this.player4Game.setText("-");
+    }
+
+    public Stage getStage() {
+        return this.stage;
+    }
+
+    public void dispose() {
+        this.stage.dispose();
     }
 }

@@ -5,12 +5,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class BidTable extends Table {
 
+    private Stage stage;
     private TextButton bid0Btn;
     private TextButton bid2Btn;
     private TextButton bid3Btn;
@@ -18,6 +20,8 @@ public class BidTable extends Table {
     public ShapeRenderer rect;
 
     public BidTable() {
+
+        stage = new Stage();//Create stage for table
 
         //Generate font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/cour.TTF"));
@@ -48,6 +52,7 @@ public class BidTable extends Table {
         this.pack();
         System.out.println(this.getCell(bid0Btn).getActorX());
         rect = new ShapeRenderer();
+        stage.addActor(this);
     }
 
     public TextButton getBid0Btn() {
@@ -71,5 +76,13 @@ public class BidTable extends Table {
         this.rect.setColor(Color.BLACK);
         this.rect.rect(this.getCell(bid0Btn).getActorX(), this.getCell(bid0Btn).getActorY(), this.getCell(bid0Btn).getActorWidth() * 13, this.getCell(bid0Btn).getActorHeight());
         this.rect.end();
+    }
+
+    public Stage getStage() {
+        return this.stage;
+    }
+
+    public void dispose() {
+        this.stage.dispose();
     }
 }
