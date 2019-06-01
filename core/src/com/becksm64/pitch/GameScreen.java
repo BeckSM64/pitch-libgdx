@@ -2,6 +2,7 @@ package com.becksm64.pitch;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -41,6 +42,11 @@ public class GameScreen implements Screen {
     private int playedBestCard;
     private boolean calculatedScore;
     private int winner;
+    private int bidsTaken;
+    private boolean allBidsTaken;
+    private int highestBid;
+    private int currentBidder;
+    private int dealer;
 
     //Scoring
     private int highPoint;
@@ -92,13 +98,18 @@ public class GameScreen implements Screen {
         numPlays = 0;//Number of cards played so far in one play
         playerTurn = 0;//Index for collection of hands
         calculatedScore = false;
+        bidsTaken = 0;
+        allBidsTaken = false;
+        highestBid = -1;
+        currentBidder = 0;//Player makes initial bid
+        dealer = 0;
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         //Stage and table for score at end of round
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);//Allow input for stage
+        //Gdx.input.setInputProcessor(stage);//Allow input for stage
         scoreTable = new ScoreTable();
         stage.addActor(scoreTable);//Add score table to stage
 
@@ -106,6 +117,12 @@ public class GameScreen implements Screen {
         bidStage = new Stage();
         bidTable = new BidTable();
         bidStage.addActor(bidTable);
+
+        //Set input processors for stages
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        Gdx.input.setInputProcessor(multiplexer);
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(bidStage);
     }
 
     /*
@@ -160,6 +177,17 @@ public class GameScreen implements Screen {
         trump = null;
         currentSuit = null;
         calculatedScore = false;
+        highestBid = -1;
+        bidsTaken = 0;
+        allBidsTaken = false;
+
+        if(dealer == 3)
+            dealer = 0;
+        else
+            dealer++;
+        System.out.println("Dealer: " + dealer);
+        currentBidder = dealer;
+
         mainPile.dispose();//I think assets need to be disposed before recreating object
         deck.dispose();
         arrowImage = new Texture("arrow.png");
@@ -308,7 +336,7 @@ public class GameScreen implements Screen {
 
             Player currentPlayer = players.get(i);
             int pointsToAward = 0;
-            //int playerBid = currentPlayer.getBid();
+            int playerBid = currentPlayer.getBid();
 
             //See if player was lowest trump holder
             if(hadLowestTrump == i) {
@@ -335,26 +363,97 @@ public class GameScreen implements Screen {
             }
 
             //Check to make sure player met their bid before awarding points
-            //if(pointsToAward >= playerBid) {
+            if(pointsToAward >= playerBid)
                 currentPlayer.addToScore(pointsToAward);
-            //} else {
-                //currentPlayer.addToScore(playerBid * -1);//Subtract bid from player score
-            //}
+            else
+                currentPlayer.addToScore(playerBid * -1);//Subtract bid from player score
         }
     }
 
     private void takePlayerBid() {
 
+        //Take player bid
+        if(currentBidder == 0) {
+            bidStage.draw();
+        }
 
+        //Take computer bids
+        if(currentBidder != 0 && bidsTaken < 4){
+
+            int currentBid = players.get(currentBidder).makeBid(highestBid);
+            System.out.println(currentBidder + ": " + players.get(currentBidder).getBid() + "-" + currentBid);
+            if(currentBid > highestBid) {
+                highestBid = currentBid;
+                playerTurn = currentBidder;//Highest bidder starts round
+            }
+            if(currentBidder == 3)
+                currentBidder = 0;
+            else
+                currentBidder++;
+            bidsTaken++;//Increment the number of bids taken
+        }
+
+        //Stop taking bids when everyone has bid
+        if(bidsTaken == 4)
+            allBidsTaken = true;
     }
 
     @Override
     public void show() {
+
         //Hand next round button click
         scoreTable.getNextRoundBtn().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 resetRound();
+            }
+        });
+
+        bidTable.getBid0Btn().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                players.get(0).setBid(0);
+                bidsTaken++;
+                currentBidder++;
+            }
+        });
+
+        bidTable.getBid2Btn().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(2 > highestBid) {
+                    players.get(0).setBid(2);
+                    highestBid = 2;
+                    playerTurn = 0;
+                    bidsTaken++;
+                    currentBidder++;
+                }
+            }
+        });
+
+        bidTable.getBid3Btn().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(3 > highestBid) {
+                    players.get(0).setBid(3);
+                    highestBid = 3;
+                    playerTurn = 0;
+                    bidsTaken++;
+                    currentBidder++;
+                }
+            }
+        });
+
+        bidTable.getBid4Btn().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(4 > highestBid) {
+                    players.get(0).setBid(4);
+                    highestBid = 4;
+                    playerTurn = 0;
+                    bidsTaken++;
+                    currentBidder++;
+                }
             }
         });
     }
@@ -367,6 +466,10 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         cam.update();//Update camera
+
+        if(!allBidsTaken) {
+            takePlayerBid();
+        }
 
         if(!isRoundOver()) {
             //Update cards player hands
@@ -449,74 +552,78 @@ public class GameScreen implements Screen {
                         (Card.HEIGHT + Card.HEIGHT / 2), Card.WIDTH, Card.WIDTH);
             batch.end();
 
-            for (int i = 0; i < players.size(); i++) {
+            //Only start turns after bids have been taken
+            if(allBidsTaken) {
 
-                //Check if player card has been touched
-                Hand currentHand = players.get(i).getPlayerHand();
+                for (int i = 0; i < players.size(); i++) {
 
-                //If hand has playable card, only select few cards may be playable\
-                boolean hasCurrentSuit = false;
-                if (currentHand.hasCurrentSuitCard(currentSuit))
-                    hasCurrentSuit = true;
+                    //Check if player card has been touched
+                    Hand currentHand = players.get(i).getPlayerHand();
 
-                //If it is player 1's turn
-                if (i == 0 && playerTurn == i) {
-                    if (Gdx.input.justTouched()) {
+                    //If hand has playable card, only select few cards may be playable\
+                    boolean hasCurrentSuit = false;
+                    if (currentHand.hasCurrentSuitCard(currentSuit))
+                        hasCurrentSuit = true;
 
-                        touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-                        cam.unproject(touchPos);
+                    //If it is player 1's turn
+                    if (i == 0 && playerTurn == i) {
+                        if (Gdx.input.justTouched()) {
 
-                        for (int j = 0; j < currentHand.size(); j++) {
+                            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                            cam.unproject(touchPos);
 
-                            Card currentCard = currentHand.getCard(j);
+                            for (int j = 0; j < currentHand.size(); j++) {
 
-                            //Only play card if it was touched, is playable, and it is that player's turn
-                            if (currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit)) {
+                                Card currentCard = currentHand.getCard(j);
 
-                                if (isStartOfRound())
-                                    trump = currentCard.getSuit();
+                                //Only play card if it was touched, is playable, and it is that player's turn
+                                if (currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit)) {
 
-                                Card cardToPlay = currentHand.playCard(j);
-                                if (numPlays == 0)
-                                    currentSuit = cardToPlay.getSuit();//Test setting currentSuit
+                                    if (isStartOfRound())
+                                        trump = currentCard.getSuit();
 
-                                //Check if the card that was just played is the best card
-                                if (mainPile.isBestCard(cardToPlay, trump, currentSuit))
-                                    playedBestCard = playerTurn;
+                                    Card cardToPlay = currentHand.playCard(j);
+                                    if (numPlays == 0)
+                                        currentSuit = cardToPlay.getSuit();//Test setting currentSuit
 
-                                mainPile.addToPile(cardToPlay);
+                                    //Check if the card that was just played is the best card
+                                    if (mainPile.isBestCard(cardToPlay, trump, currentSuit))
+                                        playedBestCard = playerTurn;
 
-                                if (numPlays != 3)
-                                    playerTurn += 1;//Make it the next player's turn
-                                numPlays += 1;//Increment the number of cards played so far this play
+                                    mainPile.addToPile(cardToPlay);
+
+                                    if (numPlays != 3)
+                                        playerTurn += 1;//Make it the next player's turn
+                                    numPlays += 1;//Increment the number of cards played so far this play
+                                }
                             }
                         }
-                    }
-                } else if (i != 0 && playerTurn == i) {
+                    } else if (i != 0 && playerTurn == i) {
 
-                    timeSeconds += Gdx.graphics.getRawDeltaTime();//Wait specified amount of time until opponent takes their turn
-                    if (timeSeconds > period) {
+                        timeSeconds += Gdx.graphics.getRawDeltaTime();//Wait specified amount of time until opponent takes their turn
+                        if (timeSeconds > period) {
 
-                        timeSeconds -= period;
+                            timeSeconds -= period;
 
-                        Player player = players.get(i);
-                        Card cardPlayed = player.takeTurn(trump, currentSuit, numPlays, hasCurrentSuit);
+                            Player player = players.get(i);
+                            Card cardPlayed = player.takeTurn(trump, currentSuit, numPlays, hasCurrentSuit);
 
-                        if (trump == null)
-                            trump = cardPlayed.getSuit();
+                            if (trump == null)
+                                trump = cardPlayed.getSuit();
 
-                        if (numPlays == 0)
-                            currentSuit = cardPlayed.getSuit();//Test setting currentSuit
+                            if (numPlays == 0)
+                                currentSuit = cardPlayed.getSuit();//Test setting currentSuit
 
-                        //Check if the card that was just played is the best card
-                        if (mainPile.isBestCard(cardPlayed, trump, currentSuit))
-                            playedBestCard = playerTurn;
+                            //Check if the card that was just played is the best card
+                            if (mainPile.isBestCard(cardPlayed, trump, currentSuit))
+                                playedBestCard = playerTurn;
 
-                        mainPile.addToPile(cardPlayed);
+                            mainPile.addToPile(cardPlayed);
 
-                        if (numPlays != 3)
-                            playerTurn += 1;//Make it the next player's turn
-                        numPlays += 1;//Increment the number of cards played so far this play
+                            if (numPlays != 3)
+                                playerTurn += 1;//Make it the next player's turn
+                            numPlays += 1;//Increment the number of cards played so far this play
+                        }
                     }
                 }
             }
@@ -576,6 +683,7 @@ public class GameScreen implements Screen {
         }
         mainPile.dispose();
         stage.dispose();
+        bidStage.dispose();
         spadeImage.dispose();
         heartImage.dispose();
         diamondImage.dispose();

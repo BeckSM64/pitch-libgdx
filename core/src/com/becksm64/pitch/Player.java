@@ -1,16 +1,51 @@
 package com.becksm64.pitch;
 
+import java.util.Random;
+
 public class Player {
 
     private Hand hand;
     private CardCollection cardsWonInRound;//A collection of cards that the player wins in a round
     private int score;
+    private int bid;
 
     public Player() {
 
         hand = new Hand();
         cardsWonInRound = new CardCollection();
         score = 0;
+        bid = 0;
+    }
+
+    /* Get the player's bid */
+    public int getBid() {
+        return this.bid;
+    }
+
+    /* Set the player's bid */
+    public void setBid(int bid) {
+        this.bid = bid;
+    }
+
+    /*
+     * Makes an automatic bid, completely random for now
+     */
+    public int makeBid(int highestBid) {
+
+        Random rand = new Random();
+        int playerBid = rand.nextInt(5);//Make a random bid
+
+        //Make sure bid isn't 1
+        if(playerBid == 1)
+            playerBid++;
+
+        if(playerBid > highestBid) {
+            this.setBid(playerBid);
+            return playerBid;
+        } else {
+            this.setBid(0);
+            return 0;//pass if bid was less than highest current bid
+        }
     }
 
     /* Get the player's score */
