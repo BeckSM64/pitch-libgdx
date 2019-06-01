@@ -520,15 +520,15 @@ public class GameScreen implements Screen {
                         batch.draw(currentCard.getCardImage(), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth(), currentCard.getCardHeight());
                     } else if(i == 1) {
 
-                        currentCard.setPosition(0 - (currentCard.getCardWidth() / 2), (currentCard.getCardWidth() * 2) + (Gdx.graphics.getHeight() / 10 * j));
+                        currentCard.setPosition(0 - (currentCard.getCardWidth() / 2), (Gdx.graphics.getHeight() / 3.5f) + (Gdx.graphics.getHeight() / 16 * j));
                         batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2, currentCard.getCardHeight() / 2, currentCard.getCardWidth(), currentCard.getCardHeight(), 1, 1, 270);
                     } else if(i == 2) {
 
-                        currentCard.setPosition((Gdx.graphics.getWidth() / 6) * j, Gdx.graphics.getHeight() - (currentCard.getCardHeight() / 2));
+                        currentCard.setPosition((Gdx.graphics.getWidth() / 6) + (Gdx.graphics.getWidth() / 10) * j, Gdx.graphics.getHeight() - (currentCard.getCardHeight() / 2));
                         batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2, currentCard.getCardHeight() / 2, currentCard.getCardWidth(), currentCard.getCardHeight(), 1, 1, 180);
                     } else {
 
-                        currentCard.setPosition(Gdx.graphics.getWidth() - (currentCard.getCardWidth() / 2), (currentCard.getCardWidth() * 2) + (Gdx.graphics.getHeight() / 10 * j));
+                        currentCard.setPosition(Gdx.graphics.getWidth() - (currentCard.getCardWidth() / 2), (Gdx.graphics.getHeight() / 3.5f) + (Gdx.graphics.getHeight() / 16 * j));
                         batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2, currentCard.getCardHeight() / 2, currentCard.getCardWidth(), currentCard.getCardHeight(), 1, 1, 90);
                     }
                 }
