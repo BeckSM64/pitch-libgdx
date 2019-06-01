@@ -58,6 +58,7 @@ public class GameScreen implements Screen {
     //Table to display score at the end of round
     private ScoreTable scoreTable;
     private BidTable bidTable;
+    private Hud hud;
 
     private float timeSeconds = 0f;
     private float period = 1f;
@@ -66,6 +67,7 @@ public class GameScreen implements Screen {
 
         this.game = game;
         batch = new SpriteBatch();
+        hud = new Hud(batch);
         touchPos = new Vector3(0,0,0);
 
         //Create deck for testing
@@ -373,10 +375,11 @@ public class GameScreen implements Screen {
         if(currentBidder != 0 && bidsTaken < 4){
 
             int currentBid = players.get(currentBidder).makeBid(highestBid);
-            System.out.println(currentBidder + ": " + players.get(currentBidder).getBid() + "-" + currentBid);
+            //System.out.println(currentBidder + ": " + players.get(currentBidder).getBid() + "-" + currentBid);
             if(currentBid > highestBid) {
                 highestBid = currentBid;
                 playerTurn = currentBidder;//Highest bidder starts round
+                hud.setPlayerBid("P" + (currentBidder + 1) + ": " + highestBid);
             }
             if(currentBidder == 3)
                 currentBidder = 0;
@@ -416,6 +419,7 @@ public class GameScreen implements Screen {
                 if(2 > highestBid) {
                     players.get(0).setBid(2);
                     highestBid = 2;
+                    hud.setPlayerBid("P" + (currentBidder + 1) + ": " + highestBid);
                     playerTurn = 0;
                     bidsTaken++;
                     currentBidder++;
@@ -429,6 +433,7 @@ public class GameScreen implements Screen {
                 if(3 > highestBid) {
                     players.get(0).setBid(3);
                     highestBid = 3;
+                    hud.setPlayerBid("P" + (currentBidder + 1) + ": " + highestBid);
                     playerTurn = 0;
                     bidsTaken++;
                     currentBidder++;
@@ -442,6 +447,7 @@ public class GameScreen implements Screen {
                 if(4 > highestBid) {
                     players.get(0).setBid(4);
                     highestBid = 4;
+                    hud.setPlayerBid("P" + (currentBidder + 1) + ": " + highestBid);
                     playerTurn = 0;
                     bidsTaken++;
                     currentBidder++;
@@ -459,6 +465,10 @@ public class GameScreen implements Screen {
 
         cam.update();//Update camera
 
+        //Draw the heads up display
+        batch.setProjectionMatrix(hud.getStage().getCamera().combined);
+        hud.getStage().draw();
+
         if(!allBidsTaken) {
             takePlayerBid();
         }
@@ -469,6 +479,7 @@ public class GameScreen implements Screen {
                 player.getPlayerHand().update();
             }
 
+            batch.setProjectionMatrix(cam.combined);
             batch.begin();//Start drawing
 
             //Draw arrow to point to player whose turn it is
