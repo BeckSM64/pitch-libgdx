@@ -102,6 +102,7 @@ public class GameScreen implements Screen {
         highestBid = -1;
         currentBidder = 0;//Player makes initial bid
         dealer = 0;
+        jackPoint = -1;//Make sure point is not counted unless jack is out
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
