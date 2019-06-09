@@ -470,6 +470,89 @@ public class GameScreen implements Screen {
         });
     }
 
+    public void drawAssets() {
+
+        batch.setProjectionMatrix(cam.combined);
+        batch.begin();//Start drawing
+
+        //Draw arrow to point to player whose turn it is
+        if(arrowImage != null && allBidsTaken) {
+            if (playerTurn == 0)
+                batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - Card.HEIGHT, Card.WIDTH / 2.0f, Card.WIDTH / 2.0f, Card.WIDTH, Card.WIDTH, 1, 1, 0);
+            else if (playerTurn == 1)
+                batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2.0f) - Card.HEIGHT, (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f), Card.WIDTH / 2.0f, Card.WIDTH / 2.0f, Card.WIDTH, Card.WIDTH, 1, 1, 270);
+            else if (playerTurn == 2)
+                batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f), (Gdx.graphics.getHeight() / 2.0f) + Card.WIDTH, Card.WIDTH / 2.0f, Card.WIDTH / 2.0f, Card.WIDTH, Card.WIDTH, 1, 1, 180);
+            else
+                batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2.0f) + (Card.HEIGHT / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f), Card.WIDTH / 2.0f, Card.WIDTH / 2.0f, Card.WIDTH, Card.WIDTH, 1, 1, 90);
+        }
+
+        //Draw all hands
+        for(int i = 0; i < players.size(); i++) {
+
+            Hand currentHand = players.get(i).getPlayerHand();
+            for(int j = 0; j < currentHand.size(); j++) {
+
+                Card currentCard = currentHand.getCard(j);//Get the current card
+                boolean hasCurrentSuit = false;
+                if(currentHand.hasCurrentSuitCard(currentSuit))
+                    hasCurrentSuit = true;
+
+                if(i == 0) {
+                    //Draw a card with transparency if it isn't a playable card
+                    if(currentHand.hasCurrentSuitCard(currentSuit)) {
+                        if (currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit)) {
+                            Color c = batch.getColor();
+                            batch.setColor(c.r, c.g, c.b, 1);
+                        } else {
+                            Color c = batch.getColor();
+                            batch.setColor(c.r, c.g, c.b, 0.1f);
+                        }
+                    } else {
+                        Color c = batch.getColor();
+                        batch.setColor(c.r, c.g, c.b, 1);
+                    }
+                    currentCard.setPositionX((Gdx.graphics.getWidth() / 6.0f) * j);
+                    batch.draw(currentCard.getCardImage(), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth(), currentCard.getCardHeight());
+                } else if(i == 1) {
+
+                    currentCard.setPosition(0 - (currentCard.getCardWidth() / 4.0f), (Gdx.graphics.getHeight() / 3.30f) + (Gdx.graphics.getHeight() / 24.0f * j));
+                    currentCard.setRotation(270);
+                    batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() /1.5f, currentCard.getCardHeight() / 1.5f, 1, 1, 270);
+                } else if(i == 2) {
+
+                    currentCard.setPosition((Gdx.graphics.getWidth() / 4.0f) + (Gdx.graphics.getWidth() / 16.0f) * j, Gdx.graphics.getHeight() - (currentCard.getCardHeight() / 1.5f));
+                    currentCard.setRotation(180);
+                    batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() / 1.5f, currentCard.getCardHeight() / 1.5f, 1, 1, 180);
+                } else {
+
+                    currentCard.setPosition(Gdx.graphics.getWidth() - (currentCard.getCardWidth() / 1.25f), (Gdx.graphics.getHeight() / 3.0f) + (Gdx.graphics.getHeight() / 24.0f * j));
+                    currentCard.setRotation(90);
+                    batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() / 1.5f, currentCard.getCardHeight() / 1.5f, 1, 1, 90);
+                }
+            }
+
+            //Get rid of transparency
+            Color c = batch.getColor();
+            batch.setColor(c.r, c.g, c.b, 1);
+        }
+
+        //Draw main pile into which cards are played
+        for(int i = 0; i < mainPile.size(); i++) {
+            Card currentCard = mainPile.getCard(i);
+            currentCard.setPosition((Gdx.graphics.getWidth() / 2.0f) - (currentCard.getCardWidth() / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - (currentCard.getCardHeight() / 2.0f));
+            //batch.draw(currentCard.getCardImage(), currentCard.getPosition().x + (i * 20), currentCard.getPosition().y + (i * 20), currentCard.getCardWidth(), currentCard.getCardHeight());
+            batch.draw(new TextureRegion(currentCard.getCardImage()), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() / 1.5f, currentCard.getCardHeight() / 1.5f, 1, 1, currentCard.getRotation());
+        }
+
+        //Draw trump image below main pile
+        setTrumpImage();
+        if(trump != null)
+            batch.draw(trumpImage, (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f), (Gdx.graphics.getHeight() / 2.0f) +
+                    (Card.HEIGHT + Card.HEIGHT / 2.0f), Card.WIDTH, Card.WIDTH);
+        batch.end();
+    }
+
     @Override
     public void render(float delta) {
 
@@ -495,85 +578,7 @@ public class GameScreen implements Screen {
                 player.getPlayerHand().update();
             }
 
-            batch.setProjectionMatrix(cam.combined);
-            batch.begin();//Start drawing
-
-            //Draw arrow to point to player whose turn it is
-            if(arrowImage != null && allBidsTaken) {
-                if (playerTurn == 0)
-                    batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - Card.HEIGHT, Card.WIDTH / 2.0f, Card.WIDTH / 2.0f, Card.WIDTH, Card.WIDTH, 1, 1, 0);
-                else if (playerTurn == 1)
-                    batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2.0f) - Card.HEIGHT, (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f), Card.WIDTH / 2.0f, Card.WIDTH / 2.0f, Card.WIDTH, Card.WIDTH, 1, 1, 270);
-                else if (playerTurn == 2)
-                    batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f), (Gdx.graphics.getHeight() / 2.0f) + Card.WIDTH, Card.WIDTH / 2.0f, Card.WIDTH / 2.0f, Card.WIDTH, Card.WIDTH, 1, 1, 180);
-                else
-                    batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2.0f) + (Card.HEIGHT / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f), Card.WIDTH / 2.0f, Card.WIDTH / 2.0f, Card.WIDTH, Card.WIDTH, 1, 1, 90);
-            }
-
-            //Draw all hands
-            for(int i = 0; i < players.size(); i++) {
-
-                Hand currentHand = players.get(i).getPlayerHand();
-                for(int j = 0; j < currentHand.size(); j++) {
-
-                    Card currentCard = currentHand.getCard(j);//Get the current card
-                    boolean hasCurrentSuit = false;
-                    if(currentHand.hasCurrentSuitCard(currentSuit))
-                        hasCurrentSuit = true;
-
-                    if(i == 0) {
-                        //Draw a card with transparency if it isn't a playable card
-                        if(currentHand.hasCurrentSuitCard(currentSuit)) {
-                            if (currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit)) {
-                                Color c = batch.getColor();
-                                batch.setColor(c.r, c.g, c.b, 1);
-                            } else {
-                                Color c = batch.getColor();
-                                batch.setColor(c.r, c.g, c.b, 0.1f);
-                            }
-                        } else {
-                            Color c = batch.getColor();
-                            batch.setColor(c.r, c.g, c.b, 1);
-                        }
-                        currentCard.setPositionX((Gdx.graphics.getWidth() / 6.0f) * j);
-                        batch.draw(currentCard.getCardImage(), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth(), currentCard.getCardHeight());
-                    } else if(i == 1) {
-
-                        currentCard.setPosition(0 - (currentCard.getCardWidth() / 4.0f), (Gdx.graphics.getHeight() / 3.30f) + (Gdx.graphics.getHeight() / 24.0f * j));
-                        currentCard.setRotation(270);
-                        batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() /1.5f, currentCard.getCardHeight() / 1.5f, 1, 1, 270);
-                    } else if(i == 2) {
-
-                        currentCard.setPosition((Gdx.graphics.getWidth() / 4.0f) + (Gdx.graphics.getWidth() / 16.0f) * j, Gdx.graphics.getHeight() - (currentCard.getCardHeight() / 1.5f));
-                        currentCard.setRotation(180);
-                        batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() / 1.5f, currentCard.getCardHeight() / 1.5f, 1, 1, 180);
-                    } else {
-
-                        currentCard.setPosition(Gdx.graphics.getWidth() - (currentCard.getCardWidth() / 1.25f), (Gdx.graphics.getHeight() / 3.0f) + (Gdx.graphics.getHeight() / 24.0f * j));
-                        currentCard.setRotation(90);
-                        batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() / 1.5f, currentCard.getCardHeight() / 1.5f, 1, 1, 90);
-                    }
-                }
-
-                //Get rid of transparency
-                Color c = batch.getColor();
-                batch.setColor(c.r, c.g, c.b, 1);
-            }
-
-            //Draw main pile into which cards are played
-            for(int i = 0; i < mainPile.size(); i++) {
-                Card currentCard = mainPile.getCard(i);
-                currentCard.setPosition((Gdx.graphics.getWidth() / 2.0f) - (currentCard.getCardWidth() / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - (currentCard.getCardHeight() / 2.0f));
-                //batch.draw(currentCard.getCardImage(), currentCard.getPosition().x + (i * 20), currentCard.getPosition().y + (i * 20), currentCard.getCardWidth(), currentCard.getCardHeight());
-                batch.draw(new TextureRegion(currentCard.getCardImage()), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() / 1.5f, currentCard.getCardHeight() / 1.5f, 1, 1, currentCard.getRotation());
-            }
-
-            //Draw trump image below main pile
-            setTrumpImage();
-            if(trump != null)
-                batch.draw(trumpImage, (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f), (Gdx.graphics.getHeight() / 2.0f) +
-                        (Card.HEIGHT + Card.HEIGHT / 2.0f), Card.WIDTH, Card.WIDTH);
-            batch.end();
+            drawAssets();//Draw cards, arrow, and trump image
 
             //Only start turns after bids have been taken
             if(allBidsTaken) {
