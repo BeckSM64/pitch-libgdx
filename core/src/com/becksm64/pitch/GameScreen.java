@@ -61,6 +61,7 @@ public class GameScreen implements Screen {
     private Hud hud;
 
     private float timeSeconds = 0f;
+    private float timeSeconds2 = 0f;
     private float period = 1f;
 
     public GameScreen(Game game) {
@@ -580,8 +581,8 @@ public class GameScreen implements Screen {
 
             drawAssets();//Draw cards, arrow, and trump image
 
-            //Only start turns after bids have been taken
-            if(allBidsTaken) {
+            //Only start turns after bids have been taken and if all players haven't already gone
+            if(allBidsTaken && numPlays <= 3) {
 
                 for (int i = 0; i < players.size(); i++) {
 
@@ -662,8 +663,14 @@ public class GameScreen implements Screen {
             playerTurn = 0;//Go back to first player
 
         //Check if play is over, after all four players have gone
-        if(numPlays > 3)
-            resetPlay();
+        if(numPlays > 3) {
+            //Adds a delay after all cards have been played so player can see what cards were played
+            timeSeconds2 += Gdx.graphics.getRawDeltaTime();//Wait specified amount of time until opponent takes their turn
+            if (timeSeconds2 > 2f) {
+                timeSeconds2 -= 2f;
+                resetPlay();//Reset table
+            }
+        }
 
         //When round is over, start a new round
         if(isRoundOver()) {
