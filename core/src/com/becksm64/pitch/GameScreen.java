@@ -365,6 +365,14 @@ public class GameScreen implements Screen {
         }
     }
 
+    private void resetPlayerBids(int exclude) {
+
+        for(int i = 0; i < players.size(); i++) {
+            if(i != exclude)
+                players.get(i).setBid(0);
+        }
+    }
+
     private void takePlayerBid() {
 
         //Take player bid
@@ -376,12 +384,14 @@ public class GameScreen implements Screen {
         if(currentBidder != 0 && bidsTaken < 4){
 
             int currentBid = players.get(currentBidder).makeBid(highestBid);
-            //System.out.println(currentBidder + ": " + players.get(currentBidder).getBid() + "-" + currentBid);
             if(currentBid > highestBid) {
+
                 highestBid = currentBid;
                 playerTurn = currentBidder;//Highest bidder starts round
                 hud.setPlayerBid("P" + (currentBidder + 1) + ": " + highestBid);
             }
+
+            resetPlayerBids(playerTurn);//Reset bids to 0 except for player whose turn it is (Highest bidder)
             if(currentBidder == 3)
                 currentBidder = 0;
             else
@@ -422,6 +432,7 @@ public class GameScreen implements Screen {
                     highestBid = 2;
                     hud.setPlayerBid("P" + (currentBidder + 1) + ": " + highestBid);
                     playerTurn = 0;
+                    resetPlayerBids(playerTurn);
                     bidsTaken++;
                     currentBidder++;
                 }
@@ -436,6 +447,7 @@ public class GameScreen implements Screen {
                     highestBid = 3;
                     hud.setPlayerBid("P" + (currentBidder + 1) + ": " + highestBid);
                     playerTurn = 0;
+                    resetPlayerBids(playerTurn);
                     bidsTaken++;
                     currentBidder++;
                 }
@@ -450,6 +462,7 @@ public class GameScreen implements Screen {
                     highestBid = 4;
                     hud.setPlayerBid("P" + (currentBidder + 1) + ": " + highestBid);
                     playerTurn = 0;
+                    resetPlayerBids(playerTurn);
                     bidsTaken++;
                     currentBidder++;
                 }
