@@ -480,8 +480,10 @@ public class GameScreen implements Screen {
         cam.update();//Update camera
 
         //Draw the heads up display
-        batch.setProjectionMatrix(hud.getStage().getCamera().combined);
-        hud.getStage().draw();
+        if(!isRoundOver()) {
+            batch.setProjectionMatrix(hud.getStage().getCamera().combined);
+            hud.getStage().draw();
+        }
 
         if(!allBidsTaken) {
             takePlayerBid();
