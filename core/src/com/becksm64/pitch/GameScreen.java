@@ -46,6 +46,7 @@ public class GameScreen implements Screen {
     private int highestBid;
     private int currentBidder;
     private int dealer;
+    private int cardSpeed;
 
     //Scoring
     private int highPoint;
@@ -104,6 +105,8 @@ public class GameScreen implements Screen {
         currentBidder = 0;//Player makes initial bid
         dealer = 0;
         jackPoint = -1;//Make sure point is not counted unless jack is out
+        cardSpeed = (int) (18 * Gdx.graphics.getDensity());
+        System.out.println(cardSpeed);
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -181,7 +184,6 @@ public class GameScreen implements Screen {
             dealer = 0;
         else
             dealer++;
-        System.out.println("Dealer: " + dealer);
         currentBidder = dealer;
 
         mainPile.dispose();//I think assets need to be disposed before recreating object
@@ -541,9 +543,25 @@ public class GameScreen implements Screen {
         //Draw main pile into which cards are played
         for(int i = 0; i < mainPile.size(); i++) {
             Card currentCard = mainPile.getCard(i);
-            currentCard.setPosition((Gdx.graphics.getWidth() / 2.0f) - (currentCard.getCardWidth() / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - (currentCard.getCardHeight() / 2.0f));
-            //batch.draw(currentCard.getCardImage(), currentCard.getPosition().x + (i * 20), currentCard.getPosition().y + (i * 20), currentCard.getCardWidth(), currentCard.getCardHeight());
-            batch.draw(new TextureRegion(currentCard.getCardImage()), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() / 1.5f, currentCard.getCardHeight() / 1.5f, 1, 1, currentCard.getRotation());
+
+            //Move x position
+            if(currentCard.getPosition().x > currentCard.getEndPosition().x + cardSpeed)
+                currentCard.setPositionX(currentCard.getPosition().x - cardSpeed);
+            else if(currentCard.getPosition().x < currentCard.getEndPosition().x - cardSpeed)
+                currentCard.setPositionX(currentCard.getPosition().x + cardSpeed);
+            else
+                currentCard.setPositionX(currentCard.getEndPosition().x);
+
+            //Move y position
+            if(currentCard.getPosition().y > currentCard.getEndPosition().y + cardSpeed)
+                currentCard.setPositionY(currentCard.getPosition().y - cardSpeed);
+            else if(currentCard.getPosition().y < currentCard.getEndPosition().y - cardSpeed)
+                currentCard.setPositionY(currentCard.getPosition().y + cardSpeed);
+            else
+                currentCard.setPositionY(currentCard.getEndPosition().y);
+
+            //currentCard.setPosition((Gdx.graphics.getWidth() / 2.0f) - (currentCard.getCardWidth() / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - (currentCard.getCardHeight() / 2.0f));
+            batch.draw(new TextureRegion(currentCard.getCardImage()), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() * 1.25f, currentCard.getCardHeight() * 1.25f, 1, 1, currentCard.getRotation());
         }
 
         //Draw trump image below main pile

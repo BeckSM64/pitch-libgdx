@@ -20,6 +20,7 @@ public class Card {
     private Rectangle bounds;
     private Vector3 position;
     private int rotation;
+    private Vector3 endPosition;
 
     /*
      * Constructor that takes the suit and value of the card to be created
@@ -49,6 +50,7 @@ public class Card {
         cardHeight = Gdx.graphics.getHeight() / 6;
 
         position = new Vector3(0, 0, 0);
+        endPosition = new Vector3((Gdx.graphics.getWidth() / 2.0f) - (this.getCardWidth() / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - (this.getCardHeight() / 2.0f), 0);
         bounds = new Rectangle(position.x, position.y, cardWidth, cardHeight);
     }
 
@@ -86,6 +88,10 @@ public class Card {
 
     public Vector3 getPosition() {
         return this.position;
+    }
+
+    public Vector3 getEndPosition() {
+        return endPosition;
     }
 
     public void setPosition(float x, float y) {
