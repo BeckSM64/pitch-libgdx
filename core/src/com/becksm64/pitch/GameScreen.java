@@ -23,6 +23,7 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Vector3 touchPos;
 
+    //Game objects and assets
     private Deck deck;
     private CardCollection mainPile;
     private List<Player> players;
@@ -33,7 +34,7 @@ public class GameScreen implements Screen {
     private Texture trumpImage;//Will change depending on current trump
     private Texture arrowImage;
 
-    //Test game logic
+    //Game logic
     private String trump;
     private String currentSuit;
     private int numPlays;
@@ -55,13 +56,14 @@ public class GameScreen implements Screen {
     private int lowPoint;
     private int gamePoint;
 
-    private OrthographicCamera cam;
+    private OrthographicCamera cam;//Camera for game world
 
     //Table to display score at the end of round
     private ScoreTable scoreTable;
     private BidTable bidTable;
     private Hud hud;
 
+    //Floats for time delays
     private float timeSeconds = 0f;
     private float timeSeconds2 = 0f;
     private float period = 1f;
@@ -73,10 +75,8 @@ public class GameScreen implements Screen {
         hud = new Hud(batch);
         touchPos = new Vector3(0,0,0);
 
-        //Create deck for testing
         deck = new Deck();
         deck.shuffle();
-
         mainPile = new CardCollection();//Create the pile which cards are played to
 
         //Add new hands to collection of hands
@@ -95,7 +95,7 @@ public class GameScreen implements Screen {
         dealHands();//Deal hands
 
         //Game logic
-        trump = null;//Starts as null
+        trump = null;
         currentSuit = null;
         numPlays = 0;//Number of cards played so far in one play
         playerTurn = 0;//Index for collection of hands
@@ -106,17 +106,15 @@ public class GameScreen implements Screen {
         currentBidder = 0;//Player makes initial bid
         dealer = 0;
         jackPoint = -1;//Make sure point is not counted unless jack is out
-        cardSpeed = (int) (30 * Gdx.graphics.getDensity());
+        cardSpeed = (int) (30 * Gdx.graphics.getDensity());//Card speed calculated based on screen size
         cardsMoving = true;
 
+        //Create camera and set view
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        //Table for score at end of round
-        scoreTable = new ScoreTable();
-
-        //Table for taking bid at the beginning of the round
-        bidTable = new BidTable();
+        scoreTable = new ScoreTable();//Table for score at end of round
+        bidTable = new BidTable();//Table for taking bid at the beginning of the round
 
         //Set input processors for stages
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -181,19 +179,25 @@ public class GameScreen implements Screen {
         bidsTaken = 0;
         allBidsTaken = false;
 
+        //Set the next dealer
         if(dealer == 3)
             dealer = 0;
         else
             dealer++;
-        currentBidder = dealer;
 
-        mainPile.dispose();//I think assets need to be disposed before recreating object
+        currentBidder = dealer;//Set the next bidder
+
+        //Dispose of assets in deck and main pile
+        mainPile.dispose();
         deck.dispose();
         arrowImage = new Texture("arrow.png");
+
+        //Discard cards won during previous round
         for(Player player : players) {
             player.getWonCards().dispose();
             player.resetWonCards();
         }
+
         jackPoint = -1;//Jack may not always be out so make sure point doesn't get set by accident
 
         //Create new game objects and setup game
@@ -213,6 +217,7 @@ public class GameScreen implements Screen {
         for(int i = 0; i < players.size(); i++) {
             players.get(playedBestCard).addToCardsWon(mainPile.removeCard());
         }
+
         currentSuit = null;//Reset current suit
         numPlays = 0;
         playerTurn = playedBestCard;
@@ -223,6 +228,7 @@ public class GameScreen implements Screen {
      * Sets the trump texture to the appropriate suit texture to be drawn on screen
      */
     private void setTrumpImage() {
+
         if(trump != null) {
             if (trump.equals("spades"))
                 trumpImage = spadeImage;
@@ -235,6 +241,9 @@ public class GameScreen implements Screen {
         }
     }
 
+    /*
+     * Displays the table that shows the player scores including which points were won during the round
+     */
     private void displayScoreTable() {
 
         //Set the appropriate player scores in the score table
@@ -243,11 +252,13 @@ public class GameScreen implements Screen {
         scoreTable.setPlayer3Score(players.get(2).getScore());
         scoreTable.setPlayer4Score(players.get(3).getScore());
 
+        //Set the point labels in the score table
         scoreTable.setPlayerHigh(highPoint);
         scoreTable.setPlayerJack(jackPoint);
         scoreTable.setPlayerLow(lowPoint);
         scoreTable.setPlayerGame(gamePoint);
 
+        //Set assets to null and draw score table
         calculatedScore = true;
         arrowImage = null;
         trump = null;
@@ -370,6 +381,9 @@ public class GameScreen implements Screen {
         }
     }
 
+    /*
+     * Resets all player bids to 0 excluding the current highest bid
+     */
     private void resetPlayerBids(int exclude) {
 
         for(int i = 0; i < players.size(); i++) {
@@ -378,6 +392,9 @@ public class GameScreen implements Screen {
         }
     }
 
+    /*
+     * Takes the computer player bids and displays a table with bid options for the player when it is their turn
+     */
     private void takePlayerBid() {
 
         //Take player bid
@@ -401,6 +418,7 @@ public class GameScreen implements Screen {
                 currentBidder = 0;
             else
                 currentBidder++;
+
             bidsTaken++;//Increment the number of bids taken
         }
 
@@ -529,6 +547,7 @@ public class GameScreen implements Screen {
 
         //Draw arrow to point to player whose turn it is
         if(arrowImage != null && allBidsTaken) {
+
             if (playerTurn == 0)
                 batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - Card.HEIGHT, Card.WIDTH / 2.0f, Card.WIDTH / 2.0f, Card.WIDTH, Card.WIDTH, 1, 1, 0);
             else if (playerTurn == 1)
@@ -551,6 +570,7 @@ public class GameScreen implements Screen {
                     hasCurrentSuit = true;
 
                 if(i == 0) {
+
                     //Draw a card with transparency if it isn't a playable card
                     if(currentHand.hasCurrentSuitCard(currentSuit)) {
                         if (currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit)) {
@@ -591,6 +611,7 @@ public class GameScreen implements Screen {
 
         //Draw main pile into which cards are played
         for(int i = 0; i < mainPile.size(); i++) {
+
             Card currentCard = mainPile.getCard(i);
             playCards(currentCard);//Animation for playing cards (basically just changes played cards position till they're in the middle)
             batch.draw(new TextureRegion(currentCard.getCardImage()), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() * 1.25f, currentCard.getCardHeight() * 1.25f, 1, 1, currentCard.getRotation());
@@ -624,6 +645,7 @@ public class GameScreen implements Screen {
         }
 
         if(!isRoundOver()) {
+
             //Update cards player hands
             for(Player player : players) {
                 player.getPlayerHand().update();
