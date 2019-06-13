@@ -47,6 +47,7 @@ public class GameScreen implements Screen {
     private int currentBidder;
     private int dealer;
     private int cardSpeed;
+    private boolean cardsMoving;
 
     //Scoring
     private int highPoint;
@@ -105,8 +106,8 @@ public class GameScreen implements Screen {
         currentBidder = 0;//Player makes initial bid
         dealer = 0;
         jackPoint = -1;//Make sure point is not counted unless jack is out
-        cardSpeed = (int) (18 * Gdx.graphics.getDensity());
-        System.out.println(cardSpeed);
+        cardSpeed = (int) (30 * Gdx.graphics.getDensity());
+        cardsMoving = true;
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -215,6 +216,7 @@ public class GameScreen implements Screen {
         currentSuit = null;//Reset current suit
         numPlays = 0;
         playerTurn = playedBestCard;
+        cardsMoving = true;
     }
 
     /*
@@ -473,7 +475,54 @@ public class GameScreen implements Screen {
         });
     }
 
-    public void drawAssets() {
+    /*
+     * Changes card positions that are in the main pile so they appear to be being played from player hands
+     */
+    private void playCards(Card currentCard) {
+
+        if(cardsMoving) {
+            //Move x position
+            if (currentCard.getPosition().x > currentCard.getEndPosition().x + cardSpeed)
+                currentCard.setPositionX(currentCard.getPosition().x - cardSpeed);
+            else if (currentCard.getPosition().x < currentCard.getEndPosition().x - cardSpeed)
+                currentCard.setPositionX(currentCard.getPosition().x + cardSpeed);
+            else
+                currentCard.setPositionX(currentCard.getEndPosition().x);
+
+            //Move y position
+            if (currentCard.getPosition().y > currentCard.getEndPosition().y + cardSpeed)
+                currentCard.setPositionY(currentCard.getPosition().y - cardSpeed);
+            else if (currentCard.getPosition().y < currentCard.getEndPosition().y - cardSpeed)
+                currentCard.setPositionY(currentCard.getPosition().y + cardSpeed);
+            else
+                currentCard.setPositionY(currentCard.getEndPosition().y);
+        }
+    }
+
+    /*
+     * Slides cards off the screen by changing card positions. Slides cards towards player who won the trick
+     */
+    private void removeMainPile() {
+
+        //Slide cards off screen
+        for(int i = 0; i < mainPile.size(); i++) {
+
+            Card currentCard = mainPile.getCard(i);
+            if(playedBestCard == 0)
+                currentCard.setPositionY(currentCard.getPosition().y - cardSpeed);
+            else if(playedBestCard == 1)
+                currentCard.setPositionX(currentCard.getPosition().x - cardSpeed);
+            else if(playedBestCard == 2)
+                currentCard.setPositionY(currentCard.getPosition().y + cardSpeed);
+            else
+                currentCard.setPositionX(currentCard.getPosition().x + cardSpeed);
+        }
+    }
+
+    /*
+     * Draw all the assets on screen
+     */
+    private void drawAssets() {
 
         batch.setProjectionMatrix(cam.combined);
         batch.begin();//Start drawing
@@ -543,24 +592,7 @@ public class GameScreen implements Screen {
         //Draw main pile into which cards are played
         for(int i = 0; i < mainPile.size(); i++) {
             Card currentCard = mainPile.getCard(i);
-
-            //Move x position
-            if(currentCard.getPosition().x > currentCard.getEndPosition().x + cardSpeed)
-                currentCard.setPositionX(currentCard.getPosition().x - cardSpeed);
-            else if(currentCard.getPosition().x < currentCard.getEndPosition().x - cardSpeed)
-                currentCard.setPositionX(currentCard.getPosition().x + cardSpeed);
-            else
-                currentCard.setPositionX(currentCard.getEndPosition().x);
-
-            //Move y position
-            if(currentCard.getPosition().y > currentCard.getEndPosition().y + cardSpeed)
-                currentCard.setPositionY(currentCard.getPosition().y - cardSpeed);
-            else if(currentCard.getPosition().y < currentCard.getEndPosition().y - cardSpeed)
-                currentCard.setPositionY(currentCard.getPosition().y + cardSpeed);
-            else
-                currentCard.setPositionY(currentCard.getEndPosition().y);
-
-            //currentCard.setPosition((Gdx.graphics.getWidth() / 2.0f) - (currentCard.getCardWidth() / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - (currentCard.getCardHeight() / 2.0f));
+            playCards(currentCard);//Animation for playing cards (basically just changes played cards position till they're in the middle)
             batch.draw(new TextureRegion(currentCard.getCardImage()), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() * 1.25f, currentCard.getCardHeight() * 1.25f, 1, 1, currentCard.getRotation());
         }
 
@@ -682,11 +714,17 @@ public class GameScreen implements Screen {
 
         //Check if play is over, after all four players have gone
         if(numPlays > 3) {
+
             //Adds a delay after all cards have been played so player can see what cards were played
             timeSeconds2 += Gdx.graphics.getRawDeltaTime();//Wait specified amount of time until opponent takes their turn
             if (timeSeconds2 > 2f) {
-                timeSeconds2 -= 2f;
-                resetPlay();//Reset table
+
+                cardsMoving = false;
+                removeMainPile();
+                if(timeSeconds2 > 3f) {
+                    timeSeconds2 -= 3f;
+                    resetPlay();//Reset table
+                }
             }
         }
 
