@@ -21,6 +21,7 @@ public class Card {
     private Vector3 position;
     private int rotation;
     private Vector3 endPosition;
+    private boolean moving;
 
     /*
      * Constructor that takes the suit and value of the card to be created
@@ -52,6 +53,7 @@ public class Card {
         position = new Vector3(0, 0, 0);
         endPosition = new Vector3((Gdx.graphics.getWidth() / 2.0f) - (this.getCardWidth() / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - (this.getCardHeight() / 2.0f), 0);
         bounds = new Rectangle(position.x, position.y, cardWidth, cardHeight);
+        moving = true;
     }
 
     public void update() {
@@ -145,6 +147,14 @@ public class Card {
 
     public void setRotation(int rotation) {
         this.rotation = rotation;
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
     }
 
     public void dispose() {

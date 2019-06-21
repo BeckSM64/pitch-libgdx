@@ -499,21 +499,39 @@ public class GameScreen implements Screen {
     private void playCards(Card currentCard) {
 
         if(cardsMoving) {
+
+            //Get offset for final card position depending on current rotation
+            int offsetX = 0;
+            int offsetY = 0;
+            if(currentCard.getRotation() == 270) {
+                offsetX = Card.WIDTH / 2 * -1;
+            } else if(currentCard.getRotation() == 90) {
+                offsetX = Card.WIDTH / 2;
+            } else if(currentCard.getRotation() == 0) {
+                offsetY = Card.HEIGHT / 3 * -1;
+            } else {
+                offsetY = Card.HEIGHT / 3;
+            }
+
             //Move x position
-            if (currentCard.getPosition().x > currentCard.getEndPosition().x + cardSpeed)
+            if (currentCard.getPosition().x > currentCard.getEndPosition().x + cardSpeed && currentCard.isMoving()) {
                 currentCard.setPositionX(currentCard.getPosition().x - cardSpeed);
-            else if (currentCard.getPosition().x < currentCard.getEndPosition().x - cardSpeed)
+            } else if (currentCard.getPosition().x < currentCard.getEndPosition().x - cardSpeed && currentCard.isMoving()) {
                 currentCard.setPositionX(currentCard.getPosition().x + cardSpeed);
-            else
-                currentCard.setPositionX(currentCard.getEndPosition().x);
+            } else {
+                currentCard.setMoving(false);//Stop card from moving
+                currentCard.setPositionX(currentCard.getEndPosition().x + offsetX);
+            }
 
             //Move y position
-            if (currentCard.getPosition().y > currentCard.getEndPosition().y + cardSpeed)
+            if (currentCard.getPosition().y > currentCard.getEndPosition().y + cardSpeed && currentCard.isMoving()) {
                 currentCard.setPositionY(currentCard.getPosition().y - cardSpeed);
-            else if (currentCard.getPosition().y < currentCard.getEndPosition().y - cardSpeed)
+            } else if (currentCard.getPosition().y < currentCard.getEndPosition().y - cardSpeed && currentCard.isMoving()) {
                 currentCard.setPositionY(currentCard.getPosition().y + cardSpeed);
-            else
-                currentCard.setPositionY(currentCard.getEndPosition().y);
+            } else {
+                currentCard.setMoving(false);//Stop the card from moving once it hits its final position
+                currentCard.setPositionY(currentCard.getEndPosition().y + offsetY);
+            }
         }
     }
 
@@ -614,7 +632,7 @@ public class GameScreen implements Screen {
 
             Card currentCard = mainPile.getCard(i);
             playCards(currentCard);//Animation for playing cards (basically just changes played cards position till they're in the middle)
-            batch.draw(new TextureRegion(currentCard.getCardImage()), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() * 1.25f, currentCard.getCardHeight() * 1.25f, 1, 1, currentCard.getRotation());
+            batch.draw(new TextureRegion(currentCard.getCardImage()), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth(), currentCard.getCardHeight(), 1, 1, currentCard.getRotation());
         }
 
         //Draw trump image below main pile
