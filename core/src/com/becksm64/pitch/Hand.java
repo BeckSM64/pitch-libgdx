@@ -35,7 +35,7 @@ public class Hand {
      * Returns true if hand is empty
      */
     public boolean isEmpty() {
-        return this.hand.size() > 0;
+        return this.hand.size() == 0;
     }
 
     /*
