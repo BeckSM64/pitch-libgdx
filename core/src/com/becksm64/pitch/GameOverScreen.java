@@ -6,8 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -20,8 +18,6 @@ public class GameOverScreen implements Screen {
 
     private Game game;
     private OrthographicCamera cam;
-    private BitmapFont font;
-    private BitmapFont font2;
     private Stage stage;
     private Table table;
     private TextButton newGameBtn;
@@ -32,15 +28,6 @@ public class GameOverScreen implements Screen {
         this.game = game;
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());//Set camera viewport to device screen size
-
-        //Font that is scalable
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/cour.TTF"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int) (50 * Gdx.graphics.getDensity());
-        font = generator.generateFont(parameter);
-        parameter.size = (int) (25 * Gdx.graphics.getDensity());
-        font2 = generator.generateFont(parameter);
-        generator.dispose();//Get rid of generator after done making fonts
         int padding = (int) (100 * Gdx.graphics.getDensity());
 
         //Stage and table for layout
@@ -51,12 +38,12 @@ public class GameOverScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
         Label gameOverLabel = new Label("Game Over", skin);
         Label winnerLabel = new Label("Player " + winner + " wins!", skin);
-        gameOverLabel.setStyle(new Label.LabelStyle(font, Color.WHITE));
-        winnerLabel.setStyle(new Label.LabelStyle(font2, Color.WHITE));
+        gameOverLabel.setStyle(new Label.LabelStyle(Pitch.font1, Color.WHITE));
+        winnerLabel.setStyle(new Label.LabelStyle(Pitch.font2, Color.WHITE));
 
         //Buttons
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = font2;
+        style.font = Pitch.font2;
         newGameBtn = new TextButton("NEW GAME", style);
         quitBtn = new TextButton("QUIT", style);
 
@@ -131,7 +118,5 @@ public class GameOverScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        font.dispose();
-        font2.dispose();
     }
 }

@@ -2,8 +2,6 @@ package com.becksm64.pitch;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -22,19 +20,12 @@ public class BidTable extends Table {
     public BidTable() {
 
         stage = new Stage();//Create stage for table
-
-        //Generate font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/cour.TTF"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int) (30 * Gdx.graphics.getDensity());
-        BitmapFont font72 = generator.generateFont(parameter);
-        generator.dispose();
         int padding = (int) (12 * Gdx.graphics.getDensity());
 
         //Setup styles for buttons and labels
         Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = font72;
+        style.font = Pitch.font72;
 
         //Setup buttons to take bids
         bid0Btn = new TextButton("0", style);

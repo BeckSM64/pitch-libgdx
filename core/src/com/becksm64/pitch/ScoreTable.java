@@ -2,8 +2,6 @@ package com.becksm64.pitch;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -39,81 +37,74 @@ public class ScoreTable extends Table {
     public ScoreTable() {
 
         stage = new Stage();//Create stage for table
-
-        //Generate font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/cour.TTF"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int) (30 * Gdx.graphics.getDensity());
-        BitmapFont font = generator.generateFont(parameter);
-        generator.dispose();//Get rid of generator after done making fonts
         int padding = (int) (12 * Gdx.graphics.getDensity());
 
         //Create skin for labels for score table
         Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
         Label playerTitle = new Label("Player", skin);
-        playerTitle.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        playerTitle.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         Label highTitle = new Label("High", skin);
-        highTitle.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        highTitle.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         Label jackTitle = new Label("Jack", skin);
-        jackTitle.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        jackTitle.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         Label lowTitle = new Label("Low", skin);
-        lowTitle.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        lowTitle.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         Label gameTitle = new Label("Game", skin);
-        gameTitle.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        gameTitle.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         Label totalScoreTitle = new Label("Score", skin);
-        totalScoreTitle.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        totalScoreTitle.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         Label player1 = new Label("1", skin);
-        player1.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player1.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         Label player2 = new Label("2", skin);
-        player2.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player2.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         Label player3 = new Label("3", skin);
-        player3.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player3.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         Label player4 = new Label("4", skin);
-        player4.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player4.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
 
         //Create labels for player scores to be displayed
         player1Score = new Label("0", skin);
-        player1Score.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player1Score.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player2Score = new Label("0", skin);
-        player2Score.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player2Score.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player3Score = new Label("0", skin);
-        player3Score.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player3Score.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player4Score = new Label("0", skin);
-        player4Score.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player4Score.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player1High = new Label("-", skin);
-        player1High.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player1High.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player2High = new Label("-", skin);
-        player2High.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player2High.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player3High = new Label("-", skin);
-        player3High.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player3High.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player4High = new Label("-", skin);
-        player4High.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player4High.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player1Jack = new Label("-", skin);
-        player1Jack.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player1Jack.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player2Jack = new Label("-", skin);
-        player2Jack.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player2Jack.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player3Jack = new Label("-", skin);
-        player3Jack.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player3Jack.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player4Jack = new Label("-", skin);
-        player4Jack.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player4Jack.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player1Low = new Label("-", skin);
-        player1Low.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player1Low.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player2Low = new Label("-", skin);
-        player2Low.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player2Low.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player3Low = new Label("-", skin);
-        player3Low.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player3Low.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player4Low = new Label("-", skin);
-        player4Low.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player4Low.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player1Game = new Label("-", skin);
-        player1Game.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player1Game.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player2Game = new Label("-", skin);
-        player2Game.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player2Game.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player3Game = new Label("-", skin);
-        player3Game.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player3Game.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         player4Game = new Label("-", skin);
-        player4Game.setStyle(new Label.LabelStyle(font, Color.WHITE));
+        player4Game.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = font;
+        style.font = Pitch.font4;
         style.fontColor = Color.BLACK;
         nextRoundBtn = new TextButton("Next Round", style);
 
