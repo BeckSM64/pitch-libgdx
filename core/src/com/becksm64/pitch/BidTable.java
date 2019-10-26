@@ -1,10 +1,7 @@
 package com.becksm64.pitch;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
@@ -15,7 +12,6 @@ public class BidTable extends Table {
     private TextButton bid2Btn;
     private TextButton bid3Btn;
     private TextButton bid4Btn;
-    public ShapeRenderer rect;
 
     public BidTable() {
 
@@ -23,7 +19,6 @@ public class BidTable extends Table {
         int padding = (int) (12 * Gdx.graphics.getDensity());
 
         //Setup styles for buttons and labels
-        Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = Pitch.font4;
 
@@ -39,10 +34,7 @@ public class BidTable extends Table {
         this.add(bid2Btn).pad(padding);
         this.add(bid3Btn).pad(padding);
         this.add(bid4Btn).pad(padding);
-        //this.debug();
         this.pack();
-        System.out.println(this.getCell(bid0Btn).getActorX());
-        rect = new ShapeRenderer();
         stage.addActor(this);
     }
 
@@ -60,13 +52,6 @@ public class BidTable extends Table {
 
     public TextButton getBid4Btn() {
         return bid4Btn;
-    }
-
-    public void drawBorder() {
-        this.rect.begin(ShapeRenderer.ShapeType.Line);
-        this.rect.setColor(Color.BLACK);
-        this.rect.rect(this.getCell(bid0Btn).getActorX(), this.getCell(bid0Btn).getActorY(), this.getCell(bid0Btn).getActorWidth() * 13, this.getCell(bid0Btn).getActorHeight());
-        this.rect.end();
     }
 
     public Stage getStage() {

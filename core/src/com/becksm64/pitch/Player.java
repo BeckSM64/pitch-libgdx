@@ -63,11 +63,6 @@ public class Player {
         return this.hand;
     }
 
-    /* Empty the player's hand */
-    public void discardHand() {
-        hand = new Hand();
-    }
-
     /* Deal a card to player hand */
     public void addToHand(Card card) {
         this.hand.addToHand(card);
@@ -76,21 +71,6 @@ public class Player {
     /* Takes a card from the player's hand a returns it. Also removes it from hand */
     public Card playCard(int index) {
         return this.hand.playCard(index);
-    }
-
-    /* Add a card to the player's collection */
-    public void addToWonCards(Card card) {
-        this.cardsWonInRound.addToPile(card);
-    }
-
-    /* Check if the player's hand is empty */
-    public boolean isHandEmpty() {
-
-        if(this.hand.size() == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /* Add cards to player's collection of won cards */
@@ -113,8 +93,7 @@ public class Player {
         for(int i = 0; i < this.hand.size(); i++) {
             Card currentCard = this.hand.getCard(i);
             if(currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit)) {
-                Card cardToPlay = this.playCard(i);
-                return cardToPlay;
+                return this.playCard(i);
             }
         } return null;//Should never reach this point
     }

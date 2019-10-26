@@ -13,7 +13,6 @@ public class Card {
 
     private String suit;
     private int value;
-    private String name;
     private Texture cardImage;
     private int cardWidth;
     private int cardHeight;
@@ -30,22 +29,23 @@ public class Card {
 
         this.suit = suit;
         this.value = value;
+        String name;
 
         if(value > 10) {
             if(value == 11) {
-                this.name = "jack_of_" + suit;
+                name = "jack_of_" + suit;
             } else if(value == 12) {
-                this.name = "queen_of_" + suit;
+                name = "queen_of_" + suit;
             } else if(value == 13) {
-                this.name = "king_of_" + suit;
+                name = "king_of_" + suit;
             } else {
-                this.name = "ace_of_" + suit;
+                name = "ace_of_" + suit;
             }
         } else {
-            this.name = value + "_of_" + suit;
+            name = value + "_of_" + suit;
         }
 
-        cardImage = new Texture("cards/" + this.name + ".png");
+        cardImage = new Texture("cards/" + name + ".png");
 
         cardWidth = Gdx.graphics.getWidth() / 6;
         cardHeight = Gdx.graphics.getHeight() / 6;
@@ -58,10 +58,6 @@ public class Card {
 
     public void update() {
         setBounds(position.x, position.y);//Update card bounds to match current position
-    }
-
-    public String getName()  {
-        return this.name;
     }
 
     public String getSuit() {
@@ -134,11 +130,7 @@ public class Card {
         }
 
         //Check if suit is equal to current suit
-        if(this.suit.equals(currentSuit)) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.suit.equals(currentSuit);
     }
 
     public int getRotation() {

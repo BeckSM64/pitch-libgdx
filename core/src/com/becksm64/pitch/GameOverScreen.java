@@ -19,7 +19,6 @@ public class GameOverScreen implements Screen {
     private Game game;
     private OrthographicCamera cam;
     private Stage stage;
-    private Table table;
     private TextButton newGameBtn;
     private TextButton quitBtn;
 
@@ -32,7 +31,7 @@ public class GameOverScreen implements Screen {
 
         //Stage and table for layout
         stage = new Stage();
-        table = new Table();
+        Table table = new Table();
 
         //Game over text
         Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));

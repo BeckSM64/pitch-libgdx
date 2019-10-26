@@ -40,5 +40,7 @@ public class Pitch extends Game {
 
 		font1.dispose();
 		font2.dispose();
+		font3.dispose();
+		font4.dispose();
 	}
 }

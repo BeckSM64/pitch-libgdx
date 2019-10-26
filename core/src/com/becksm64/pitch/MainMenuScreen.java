@@ -16,13 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class MainMenuScreen implements Screen {
 
-    Game game;
-    OrthographicCamera cam;
-    Stage stage;
-    Table table;
-    TextButton startButton;
-    TextButton.TextButtonStyle buttonStyle;
-    Label gameTitle;
+    private Game game;
+    private OrthographicCamera cam;
+    private Stage stage;
+    private TextButton startButton;
 
     public MainMenuScreen(Game game) {
 
@@ -32,18 +29,17 @@ public class MainMenuScreen implements Screen {
 
         //Table and stage stuff
         stage = new Stage();
-        table = new Table();
+        Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        //table.debug();//Draws the table lines so you can see the actual layout
 
         //Create menu buttons and game title
         Gdx.input.setInputProcessor(stage);
-        buttonStyle = new TextButton.TextButtonStyle();
+        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = Pitch.font1;
         startButton = new TextButton("Start", buttonStyle);
         Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-        gameTitle = new Label("Pitch", skin);
+        Label gameTitle = new Label("Pitch", skin);
         gameTitle.setStyle(new Label.LabelStyle(Pitch.font2, Color.WHITE));
 
         //Add buttons and labels to the table

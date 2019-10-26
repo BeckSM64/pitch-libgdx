@@ -4,7 +4,7 @@ import java.util.Stack;
 
 public class CardCollection {
 
-    Stack<Card> cardPile;//Stack because cards will be thrown on top of each other, like a stack ;p
+    private Stack<Card> cardPile;//Stack because cards will be thrown on top of each other, like a stack ;p
 
     public CardCollection() {
         cardPile = new Stack<Card>();
