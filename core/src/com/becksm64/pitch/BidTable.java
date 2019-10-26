@@ -25,7 +25,7 @@ public class BidTable extends Table {
         //Setup styles for buttons and labels
         Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = Pitch.font72;
+        style.font = Pitch.font4;
 
         //Setup buttons to take bids
         bid0Btn = new TextButton("0", style);
