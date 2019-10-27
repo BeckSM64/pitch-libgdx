@@ -566,14 +566,54 @@ public class GameScreen implements Screen {
         //Draw arrow to point to player whose turn it is
         if(arrowImage != null && allBidsTaken) {
 
-            if (playerTurn == 0)
-                batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - Card.HEIGHT, Card.WIDTH / 2.0f, Card.WIDTH / 2.0f, Card.WIDTH, Card.WIDTH, 1, 1, 0);
-            else if (playerTurn == 1)
-                batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2.0f) - Card.HEIGHT, (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f), Card.WIDTH / 2.0f, Card.WIDTH / 2.0f, Card.WIDTH, Card.WIDTH, 1, 1, 270);
-            else if (playerTurn == 2)
-                batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f), (Gdx.graphics.getHeight() / 2.0f) + Card.WIDTH, Card.WIDTH / 2.0f, Card.WIDTH / 2.0f, Card.WIDTH, Card.WIDTH, 1, 1, 180);
-            else
-                batch.draw(new TextureRegion(arrowImage), (Gdx.graphics.getWidth() / 2.0f) + (Card.HEIGHT / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f), Card.WIDTH / 2.0f, Card.WIDTH / 2.0f, Card.WIDTH, Card.WIDTH, 1, 1, 90);
+            if (playerTurn == 0) {
+                batch.draw(
+                        new TextureRegion(arrowImage),
+                        (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f),
+                        (Gdx.graphics.getHeight() / 2.0f) - Card.HEIGHT,
+                        Card.WIDTH / 2.0f, Card.WIDTH / 2.0f,
+                        Card.WIDTH,
+                        Card.WIDTH,
+                        1,
+                        1,
+                        0
+                );
+            } else if (playerTurn == 1) {
+                batch.draw(
+                        new TextureRegion(arrowImage),
+                        (Gdx.graphics.getWidth() / 2.0f) - Card.HEIGHT,
+                        (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f),
+                        Card.WIDTH / 2.0f,
+                        Card.WIDTH / 2.0f,
+                        Card.WIDTH, Card.WIDTH,
+                        1,
+                        1,
+                        270
+                );
+            } else if (playerTurn == 2) {
+                batch.draw(
+                        new TextureRegion(arrowImage),
+                        (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f),
+                        (Gdx.graphics.getHeight() / 2.0f) + Card.WIDTH,
+                        Card.WIDTH / 2.0f,
+                        Card.WIDTH / 2.0f,
+                        Card.WIDTH, Card.WIDTH,
+                        1,
+                        1,
+                        180
+                );
+            } else
+                batch.draw(
+                        new TextureRegion(arrowImage),
+                        (Gdx.graphics.getWidth() / 2.0f) + (Card.HEIGHT / 2.0f),
+                        (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f),
+                        Card.WIDTH / 2.0f,
+                        Card.WIDTH / 2.0f,
+                        Card.WIDTH, Card.WIDTH,
+                        1,
+                        1,
+                        90
+                );
         }
 
         //Draw all hands
@@ -603,22 +643,69 @@ public class GameScreen implements Screen {
                         batch.setColor(c.r, c.g, c.b, 1);
                     }
                     currentCard.setPositionX((Gdx.graphics.getWidth() / 6.0f) * j);
-                    batch.draw(currentCard.getCardImage(), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth(), currentCard.getCardHeight());
+                    batch.draw(
+                            currentCard.getCardImage(),
+                            currentCard.getPosition().x,
+                            currentCard.getPosition().y,
+                            currentCard.getCardWidth(),
+                            currentCard.getCardHeight()
+                    );
                 } else if(i == 1) {
 
-                    currentCard.setPosition(0 - (currentCard.getCardWidth() / 4.0f), (Gdx.graphics.getHeight() / 3.30f) + (Gdx.graphics.getHeight() / 24.0f * j));
+                    currentCard.setPosition(
+                            0 - (currentCard.getCardWidth() / 4.0f),//x
+                            (Gdx.graphics.getHeight() / 3.30f) + (Gdx.graphics.getHeight() / 24.0f * j)//y
+                    );
                     currentCard.setRotation(270);
-                    batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() /1.5f, currentCard.getCardHeight() / 1.5f, 1, 1, 270);
+                    batch.draw(
+                            new TextureRegion(Card.backCardImage),
+                            currentCard.getPosition().x, currentCard.getPosition().y,
+                            currentCard.getCardWidth() / 2.0f,
+                            currentCard.getCardHeight() / 2.0f,
+                            currentCard.getCardWidth() /1.5f,
+                            currentCard.getCardHeight() / 1.5f,
+                            1,
+                            1,
+                            270
+                    );
                 } else if(i == 2) {
 
-                    currentCard.setPosition((Gdx.graphics.getWidth() / 4.0f) + (Gdx.graphics.getWidth() / 16.0f) * j, Gdx.graphics.getHeight() - (currentCard.getCardHeight() / 1.5f));
+                    currentCard.setPosition(
+                            (Gdx.graphics.getWidth() / 4.0f) + (Gdx.graphics.getWidth() / 16.0f) * j,//x
+                            Gdx.graphics.getHeight() - (currentCard.getCardHeight() / 1.5f)//y
+                    );
                     currentCard.setRotation(180);
-                    batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() / 1.5f, currentCard.getCardHeight() / 1.5f, 1, 1, 180);
+                    batch.draw(
+                            new TextureRegion(Card.backCardImage),
+                            currentCard.getPosition().x,
+                            currentCard.getPosition().y,
+                            currentCard.getCardWidth() / 2.0f,
+                            currentCard.getCardHeight() / 2.0f,
+                            currentCard.getCardWidth() / 1.5f,
+                            currentCard.getCardHeight() / 1.5f,
+                            1,
+                            1,
+                            180
+                    );
                 } else {
 
-                    currentCard.setPosition(Gdx.graphics.getWidth() - (currentCard.getCardWidth() / 1.25f), (Gdx.graphics.getHeight() / 3.0f) + (Gdx.graphics.getHeight() / 24.0f * j));
+                    currentCard.setPosition(
+                            Gdx.graphics.getWidth() - (currentCard.getCardWidth() / 1.25f),//x
+                            (Gdx.graphics.getHeight() / 3.0f) + (Gdx.graphics.getHeight() / 24.0f * j)//y
+                    );
                     currentCard.setRotation(90);
-                    batch.draw(new TextureRegion(Card.backCardImage), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth() / 1.5f, currentCard.getCardHeight() / 1.5f, 1, 1, 90);
+                    batch.draw(
+                            new TextureRegion(Card.backCardImage),
+                            currentCard.getPosition().x,
+                            currentCard.getPosition().y,
+                            currentCard.getCardWidth() / 2.0f,
+                            currentCard.getCardHeight() / 2.0f,
+                            currentCard.getCardWidth() / 1.5f,
+                            currentCard.getCardHeight() / 1.5f,
+                            1,
+                            1,
+                            90
+                    );
                 }
             }
 
@@ -632,14 +719,29 @@ public class GameScreen implements Screen {
 
             Card currentCard = mainPile.getCard(i);
             playCards(currentCard);//Animation for playing cards (basically just changes played cards position till they're in the middle)
-            batch.draw(new TextureRegion(currentCard.getCardImage()), currentCard.getPosition().x, currentCard.getPosition().y, currentCard.getCardWidth() / 2.0f, currentCard.getCardHeight() / 2.0f, currentCard.getCardWidth(), currentCard.getCardHeight(), 1, 1, currentCard.getRotation());
+            batch.draw(
+                    new TextureRegion(currentCard.getCardImage()),
+                    currentCard.getPosition().x,
+                    currentCard.getPosition().y,
+                    currentCard.getCardWidth() / 2.0f,
+                    currentCard.getCardHeight() / 2.0f,
+                    currentCard.getCardWidth(),
+                    currentCard.getCardHeight(),
+                    1,
+                    1,
+                    currentCard.getRotation()
+            );
         }
 
         //Draw trump image below main pile
         setTrumpImage();
         if(trump != null)
-            batch.draw(trumpImage, (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f), (Gdx.graphics.getHeight() / 2.0f) +
-                    (Card.HEIGHT + Card.HEIGHT / 2.0f), Card.WIDTH, Card.WIDTH);
+            batch.draw(
+                    trumpImage, (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f),
+                    (Gdx.graphics.getHeight() / 2.0f) + (Card.HEIGHT + Card.HEIGHT / 2.0f),
+                    Card.WIDTH,
+                    Card.WIDTH
+            );
         batch.end();
     }
 
@@ -696,7 +798,8 @@ public class GameScreen implements Screen {
                                 Card currentCard = currentHand.getCard(j);
 
                                 //Only play card if it was touched, is playable, and it is that player's turn
-                                if (currentCard.getBounds().contains(touchPos.x, touchPos.y) && currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit)) {
+                                if (currentCard.getBounds().contains(touchPos.x, touchPos.y) &&
+                                        currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit)) {
 
                                     if (isStartOfRound())
                                         trump = currentCard.getSuit();

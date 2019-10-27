@@ -51,7 +51,10 @@ public class Card {
         cardHeight = Gdx.graphics.getHeight() / 6;
 
         position = new Vector3(0, 0, 0);
-        endPosition = new Vector3((Gdx.graphics.getWidth() / 2.0f) - (this.getCardWidth() / 2.0f), (Gdx.graphics.getHeight() / 2.0f) - (this.getCardHeight() / 2.0f), 0);
+        endPosition = new Vector3(
+                (Gdx.graphics.getWidth() / 2.0f) - (this.getCardWidth() / 2.0f),
+                (Gdx.graphics.getHeight() / 2.0f) - (this.getCardHeight() / 2.0f), 0
+        );
         bounds = new Rectangle(position.x, position.y, cardWidth, cardHeight);
         moving = true;
     }
