@@ -235,14 +235,15 @@ public class GameScreen implements Screen {
     private void setTrumpImage() {
 
         if(trump != null) {
-            if (trump.equals("spades"))
+            if (trump.equals("spades")) {
                 trumpImage = spadeImage;
-            else if (trump.equals("clubs"))
+            } else if (trump.equals("clubs")) {
                 trumpImage = clubImage;
-            else if (trump.equals("hearts"))
+            } else if (trump.equals("hearts")) {
                 trumpImage = heartImage;
-            else
+            } else {
                 trumpImage = diamondImage;
+            }
         }
     }
 
@@ -324,8 +325,11 @@ public class GameScreen implements Screen {
         Card lowestTrump = null;
         for(int i = 0; i < players.size(); i++) {
 
+            //Get the current player
             Player currentPlayer = players.get(i);
-            Card playersLowestTrump = currentPlayer.getWonCards().getLowestTrump(trump);//This could be null if had no trump, check for it
+
+            //This could be null if had no trump, check for it
+            Card playersLowestTrump = currentPlayer.getWonCards().getLowestTrump(trump);
 
             if(playersLowestTrump != null) {
 
@@ -379,10 +383,11 @@ public class GameScreen implements Screen {
             }
 
             //Check to make sure player met their bid before awarding points
-            if(pointsToAward >= playerBid)
+            if(pointsToAward >= playerBid) {
                 currentPlayer.addToScore(pointsToAward);
-            else
+            } else {
                 currentPlayer.addToScore(playerBid * -1);//Subtract bid from player score
+            }
         }
 
         calculatedScore = true;
@@ -394,8 +399,9 @@ public class GameScreen implements Screen {
     private void resetPlayerBids(int exclude) {
 
         for(int i = 0; i < players.size(); i++) {
-            if(i != exclude)
+            if(i != exclude) {
                 players.get(i).setBid(0);
+            }
         }
     }
 
@@ -410,7 +416,7 @@ public class GameScreen implements Screen {
         }
 
         //Take computer bids
-        if(currentBidder != 0 && bidsTaken < 4){
+        if(currentBidder != 0 && bidsTaken < 4) {
 
             int currentBid = players.get(currentBidder).makeBid(highestBid);
             if(currentBid > highestBid) {
@@ -420,18 +426,23 @@ public class GameScreen implements Screen {
                 hud.setPlayerBid("P" + (currentBidder + 1) + ": " + highestBid);
             }
 
-            resetPlayerBids(playerTurn);//Reset bids to 0 except for player whose turn it is (Highest bidder)
-            if(currentBidder == 3)
-                currentBidder = 0;
-            else
-                currentBidder++;
+            //Reset bids to 0 except for player whose turn it is (Highest bidder)
+            resetPlayerBids(playerTurn);
 
-            bidsTaken++;//Increment the number of bids taken
+            if(currentBidder == 3) {
+                currentBidder = 0;
+            } else {
+                currentBidder++;
+            }
+
+            //Increment the number of bids taken
+            bidsTaken++;
         }
 
         //Stop taking bids when everyone has bid
-        if(bidsTaken == 4)
+        if(bidsTaken == 4) {
             allBidsTaken = true;
+        }
     }
 
     @Override
@@ -512,6 +523,7 @@ public class GameScreen implements Screen {
             //Get offset for final card position depending on current rotation
             int offsetX = 0;
             int offsetY = 0;
+
             if(currentCard.getRotation() == 270) {
                 offsetX = Card.WIDTH / 2 * -1;
             } else if(currentCard.getRotation() == 90) {
@@ -523,9 +535,11 @@ public class GameScreen implements Screen {
             }
 
             //Move x position
-            if (currentCard.getPosition().x > currentCard.getEndPosition().x + cardSpeed && currentCard.isMoving()) {
+            if (currentCard.getPosition().x > currentCard.getEndPosition().x + cardSpeed
+                    && currentCard.isMoving()) {
                 currentCard.setPositionX(currentCard.getPosition().x - cardSpeed);
-            } else if (currentCard.getPosition().x < currentCard.getEndPosition().x - cardSpeed && currentCard.isMoving()) {
+            } else if (currentCard.getPosition().x < currentCard.getEndPosition().x - cardSpeed
+                    && currentCard.isMoving()) {
                 currentCard.setPositionX(currentCard.getPosition().x + cardSpeed);
             } else {
                 currentCard.setMoving(false);//Stop card from moving
@@ -533,12 +547,15 @@ public class GameScreen implements Screen {
             }
 
             //Move y position
-            if (currentCard.getPosition().y > currentCard.getEndPosition().y + cardSpeed && currentCard.isMoving()) {
+            if (currentCard.getPosition().y > currentCard.getEndPosition().y + cardSpeed
+                    && currentCard.isMoving()) {
                 currentCard.setPositionY(currentCard.getPosition().y - cardSpeed);
-            } else if (currentCard.getPosition().y < currentCard.getEndPosition().y - cardSpeed && currentCard.isMoving()) {
+            } else if (currentCard.getPosition().y < currentCard.getEndPosition().y - cardSpeed
+                    && currentCard.isMoving()) {
                 currentCard.setPositionY(currentCard.getPosition().y + cardSpeed);
             } else {
-                currentCard.setMoving(false);//Stop the card from moving once it hits its final position
+                //Stop the card from moving once it hits its final position
+                currentCard.setMoving(false);
                 currentCard.setPositionY(currentCard.getEndPosition().y + offsetY);
             }
         }
@@ -555,14 +572,15 @@ public class GameScreen implements Screen {
         for(int i = 0; i < mainPile.size(); i++) {
 
             Card currentCard = mainPile.getCard(i);
-            if(playedBestCard == 0)
+            if(playedBestCard == 0) {
                 currentCard.setPositionY(currentCard.getPosition().y - cardSpeed);
-            else if(playedBestCard == 1)
+            } else if(playedBestCard == 1) {
                 currentCard.setPositionX(currentCard.getPosition().x - cardSpeed);
-            else if(playedBestCard == 2)
+            } else if(playedBestCard == 2) {
                 currentCard.setPositionY(currentCard.getPosition().y + cardSpeed);
-            else
+            } else {
                 currentCard.setPositionX(currentCard.getPosition().x + cardSpeed);
+            }
         }
     }
 
@@ -588,10 +606,13 @@ public class GameScreen implements Screen {
             Hand currentHand = players.get(i).getPlayerHand();
             for(int j = 0; j < currentHand.size(); j++) {
 
-                Card currentCard = currentHand.getCard(j);//Get the current card
+                //Get the current card
+                Card currentCard = currentHand.getCard(j);
                 boolean hasCurrentSuit = false;
-                if(currentHand.hasCurrentSuitCard(currentSuit))
+
+                if(currentHand.hasCurrentSuitCard(currentSuit)) {
                     hasCurrentSuit = true;
+                }
 
                 if(i == 0) {
 
@@ -620,7 +641,8 @@ public class GameScreen implements Screen {
 
                     currentCard.setPosition(
                             0 - (currentCard.getCardWidth() / 4.0f),//x
-                            (Gdx.graphics.getHeight() / 3.30f) + (Gdx.graphics.getHeight() / 24.0f * j)//y
+                            (Gdx.graphics.getHeight() / 3.30f)
+                                    + (Gdx.graphics.getHeight() / 24.0f * j)//y
                     );
                     currentCard.setRotation(270);
                     batch.draw(
@@ -637,8 +659,10 @@ public class GameScreen implements Screen {
                 } else if(i == 2) {
 
                     currentCard.setPosition(
-                            (Gdx.graphics.getWidth() / 4.0f) + (Gdx.graphics.getWidth() / 16.0f) * j,//x
-                            Gdx.graphics.getHeight() - (currentCard.getCardHeight() / 1.5f)//y
+                            (Gdx.graphics.getWidth() / 4.0f)
+                                    + (Gdx.graphics.getWidth() / 16.0f) * j,//x
+                            Gdx.graphics.getHeight()
+                                    - (currentCard.getCardHeight() / 1.5f)//y
                     );
                     currentCard.setRotation(180);
                     batch.draw(
@@ -847,26 +871,33 @@ public class GameScreen implements Screen {
 
                                 Card currentCard = currentHand.getCard(j);
 
-                                //Only play card if it was touched, is playable, and it is that player's turn
+                                //Only play card if it was touched, is playable,
+                                // and it is that player's turn
                                 if (currentCard.getBounds().contains(touchPos.x, touchPos.y) &&
                                         currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit)) {
 
-                                    if (isStartOfRound())
+                                    if (isStartOfRound()) {
                                         trump = currentCard.getSuit();
+                                    }
 
                                     Card cardToPlay = currentHand.playCard(j);
-                                    if (numPlays == 0)
+                                    if (numPlays == 0) {
                                         currentSuit = cardToPlay.getSuit();//Test setting currentSuit
+                                    }
 
                                     //Check if the card that was just played is the best card
-                                    if (mainPile.isBestCard(cardToPlay, trump, currentSuit))
+                                    if (mainPile.isBestCard(cardToPlay, trump, currentSuit)) {
                                         playedBestCard = playerTurn;
+                                    }
 
                                     mainPile.addToPile(cardToPlay);
 
-                                    if (numPlays != 3)
+                                    if (numPlays != 3) {
                                         playerTurn += 1;//Make it the next player's turn
-                                    numPlays += 1;//Increment the number of cards played so far this play
+                                    }
+
+                                    //Increment the number of cards played so far this play
+                                    numPlays += 1;
                                 }
                             }
                         }
@@ -910,7 +941,8 @@ public class GameScreen implements Screen {
         if(allPlayersGone()) {
 
             //Adds a delay after all cards have been played so player can see what cards were played
-            timeSeconds2 += Gdx.graphics.getRawDeltaTime();//Wait specified amount of time until opponent takes their turn
+            //Wait specified amount of time until opponent takes their turn
+            timeSeconds2 += Gdx.graphics.getRawDeltaTime();
             if (timeSeconds2 > 2f) {
 
                 cardsMoving = false;
@@ -975,9 +1007,6 @@ public class GameScreen implements Screen {
 
         batch.dispose();
         deck.dispose();
-        for(int i = 0; i < players.size(); i++) {
-            players.get(i).getPlayerHand().dispose();
-        }
         mainPile.dispose();
         scoreTable.dispose();
         bidTable.dispose();
@@ -986,9 +1015,17 @@ public class GameScreen implements Screen {
         heartImage.dispose();
         diamondImage.dispose();
         clubImage.dispose();
-        if(trumpImage != null)
+
+        for(int i = 0; i < players.size(); i++) {
+            players.get(i).getPlayerHand().dispose();
+        }
+
+        if(trumpImage != null) {
             trumpImage.dispose();
-        if(arrowImage != null)
+        }
+
+        if(arrowImage != null) {
             arrowImage.dispose();
+        }
     }
 }
