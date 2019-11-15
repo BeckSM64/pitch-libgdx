@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -33,6 +34,7 @@ public class GameScreen implements Screen
     private Texture diamondImage;
     private Texture trumpImage;//Will change depending on current trump
     private Texture arrowImage;
+    private Sound playCardSound;//Sound for playing a single card
 
     //Game logic
     private String trump;
@@ -93,6 +95,9 @@ public class GameScreen implements Screen
         heartImage = new Texture("suits/heart_xxxhdpi.png");
         diamondImage = new Texture("suits/diamond_xxxhdpi.png");
         arrowImage = new Texture("arrow.png");//Arrow image to point to player whose turn it is
+
+        //Create game sounds
+        playCardSound = Gdx.audio.newSound(Gdx.files.internal("audio/play_card.mp3"));
 
         dealHands();//Deal hands
 
@@ -990,6 +995,7 @@ public class GameScreen implements Screen
                     {
                         if (Gdx.input.justTouched())
                         {
+                            playCardSound.play();
                             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
                             cam.unproject(touchPos);
 
@@ -1043,6 +1049,7 @@ public class GameScreen implements Screen
 
                             Player player = players.get(i);
                             Card cardPlayed = player.takeTurn(trump, currentSuit, numPlays, hasCurrentSuit);
+                            playCardSound.play();
 
                             if (trump == null)
                             {

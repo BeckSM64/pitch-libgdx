@@ -14,7 +14,8 @@ public class Pitch extends Game
 	public void create ()
 	{
 		//Create static font that is scalable
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/cour.TTF"));
+		FreeTypeFontGenerator.setMaxTextureSize(4096);
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/chewy.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = (int) (50 * Gdx.graphics.getDensity());
 		font1 = generator.generateFont(parameter);
