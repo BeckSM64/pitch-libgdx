@@ -107,7 +107,7 @@ public class GameScreen implements Screen {
         currentBidder = 0;//Player makes initial bid
         dealer = 0;
         jackPoint = -1;//Make sure point is not counted unless jack is out
-        cardSpeed = (int) (30 * Gdx.graphics.getDensity());//Card speed calculated based on screen size
+        cardSpeed = (int) (20 * Gdx.graphics.getDensity());//Card speed calculated based on screen size
         cardsMoving = true;
         displayScoreTable = false;//Boolean to determine whether or not to display scores
 
@@ -501,7 +501,9 @@ public class GameScreen implements Screen {
     }
 
     /*
-     * Changes card positions that are in the main pile so they appear to be being played from player hands
+     * Changes card positions that are in the main pile
+     * so they appear to be being played from player hands
+     * Must be called from the render method
      */
     private void playCards(Card currentCard) {
 
@@ -543,7 +545,9 @@ public class GameScreen implements Screen {
     }
 
     /*
-     * Slides cards off the screen by changing card positions. Slides cards towards player who won the trick
+     * Slides cards off the screen by changing card positions
+     * Slides cards towards player who won the trick
+     * Must be called from the render method
      */
     private void removeMainPile() {
 
@@ -562,70 +566,21 @@ public class GameScreen implements Screen {
         }
     }
 
+    /*
+     * Returns true when all the players have taken their turn
+     */
     private boolean allPlayersGone() {
         return numPlays > 3;
     }
 
     /*
-     * Draw all the assets on screen
+     * Draw all the cards on screen
+     * Must be called from the render method
      */
-    private void drawAssets() {
+    private void drawCards() {
 
         batch.setProjectionMatrix(cam.combined);
         batch.begin();//Start drawing
-
-        //Draw arrow to point to player whose turn it is
-        if(arrowImage != null && allBidsTaken) {
-
-            if (playerTurn == 0) {
-                batch.draw(
-                        new TextureRegion(arrowImage),
-                        (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f),
-                        (Gdx.graphics.getHeight() / 2.0f) - Card.HEIGHT,
-                        Card.WIDTH / 2.0f, Card.WIDTH / 2.0f,
-                        Card.WIDTH,
-                        Card.WIDTH,
-                        1,
-                        1,
-                        0
-                );
-            } else if (playerTurn == 1) {
-                batch.draw(
-                        new TextureRegion(arrowImage),
-                        (Gdx.graphics.getWidth() / 2.0f) - Card.HEIGHT,
-                        (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f),
-                        Card.WIDTH / 2.0f,
-                        Card.WIDTH / 2.0f,
-                        Card.WIDTH, Card.WIDTH,
-                        1,
-                        1,
-                        270
-                );
-            } else if (playerTurn == 2) {
-                batch.draw(
-                        new TextureRegion(arrowImage),
-                        (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f),
-                        (Gdx.graphics.getHeight() / 2.0f) + Card.WIDTH,
-                        Card.WIDTH / 2.0f,
-                        Card.WIDTH / 2.0f,
-                        Card.WIDTH, Card.WIDTH,
-                        1,
-                        1,
-                        180
-                );
-            } else
-                batch.draw(
-                        new TextureRegion(arrowImage),
-                        (Gdx.graphics.getWidth() / 2.0f) + (Card.HEIGHT / 2.0f),
-                        (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f),
-                        Card.WIDTH / 2.0f,
-                        Card.WIDTH / 2.0f,
-                        Card.WIDTH, Card.WIDTH,
-                        1,
-                        1,
-                        90
-                );
-        }
 
         //Draw all hands
         for(int i = 0; i < players.size(); i++) {
@@ -729,7 +684,12 @@ public class GameScreen implements Screen {
         for(int i = 0; i < mainPile.size(); i++) {
 
             Card currentCard = mainPile.getCard(i);
-            playCards(currentCard);//Animation for playing cards (basically just changes played cards position till they're in the middle)
+
+            //Animation for playing cards (basically just changes
+            //played cards position till they're in the middle)
+            playCards(currentCard);
+
+            //Draw the texture
             batch.draw(
                     new TextureRegion(currentCard.getCardImage()),
                     currentCard.getPosition().x,
@@ -743,16 +703,93 @@ public class GameScreen implements Screen {
                     currentCard.getRotation()
             );
         }
+        batch.end();
+    }
+
+    /*
+     * Draws the suit that is currently trump
+     */
+    private void drawTrumpImage() {
+
+        batch.setProjectionMatrix(cam.combined);
+        batch.begin();//Start drawing
 
         //Draw trump image below main pile
         setTrumpImage();
-        if(trump != null)
+        if (trump != null) {
             batch.draw(
                     trumpImage, (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f),
                     (Gdx.graphics.getHeight() / 2.0f) + (Card.HEIGHT + Card.HEIGHT / 2.0f),
                     Card.WIDTH,
                     Card.WIDTH
             );
+        }
+
+        batch.end();//Stop drawing
+    }
+
+    /*
+     * Draws the arrow that points to the player whose turn it is
+     */
+    private void drawArrowImage() {
+
+        batch.setProjectionMatrix(cam.combined);
+        batch.begin();//Start drawing
+
+        //Draw arrow to point to player whose turn it is
+        if(arrowImage != null && allBidsTaken) {
+
+            if (playerTurn == 0) {
+                batch.draw(
+                        new TextureRegion(arrowImage),
+                        (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f),
+                        (Gdx.graphics.getHeight() / 2.0f) - Card.HEIGHT,
+                        Card.WIDTH / 2.0f, Card.WIDTH / 2.0f,
+                        Card.WIDTH,
+                        Card.WIDTH,
+                        1,
+                        1,
+                        0
+                );
+            } else if (playerTurn == 1) {
+                batch.draw(
+                        new TextureRegion(arrowImage),
+                        (Gdx.graphics.getWidth() / 2.0f) - Card.HEIGHT,
+                        (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f),
+                        Card.WIDTH / 2.0f,
+                        Card.WIDTH / 2.0f,
+                        Card.WIDTH, Card.WIDTH,
+                        1,
+                        1,
+                        270
+                );
+            } else if (playerTurn == 2) {
+                batch.draw(
+                        new TextureRegion(arrowImage),
+                        (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f),
+                        (Gdx.graphics.getHeight() / 2.0f) + Card.WIDTH,
+                        Card.WIDTH / 2.0f,
+                        Card.WIDTH / 2.0f,
+                        Card.WIDTH, Card.WIDTH,
+                        1,
+                        1,
+                        180
+                );
+            } else {
+                batch.draw(
+                        new TextureRegion(arrowImage),
+                        (Gdx.graphics.getWidth() / 2.0f) + (Card.HEIGHT / 2.0f),
+                        (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f),
+                        Card.WIDTH / 2.0f,
+                        Card.WIDTH / 2.0f,
+                        Card.WIDTH, Card.WIDTH,
+                        1,
+                        1,
+                        90
+                );
+            }
+        }
+
         batch.end();
     }
 
@@ -765,19 +802,21 @@ public class GameScreen implements Screen {
 
         cam.update();//Update camera
 
-        //Draw the heads up display
-        if(!isRoundOver()) {
-            batch.setProjectionMatrix(hud.getStage().getCamera().combined);
-            hud.getStage().draw();
-        }
-
         if(!allBidsTaken) {
             takePlayerBid();
         }
 
-        drawAssets();//Draw cards, arrow, and trump image
-
         if(!isRoundOver()) {
+
+            //Draw the trump image
+            drawTrumpImage();
+
+            //Draw arrow image
+            drawArrowImage();
+
+            //Draw the heads up display
+            batch.setProjectionMatrix(hud.getStage().getCamera().combined);
+            hud.getStage().draw();
 
             //Update cards player hands
             for(Player player : players) {
@@ -904,6 +943,10 @@ public class GameScreen implements Screen {
                 displayScoreTable();
             }
         }
+
+        //Called towards the end so the z-index
+        //is greater than all other assets
+        drawCards();
     }
 
     @Override
