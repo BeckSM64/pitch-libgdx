@@ -23,17 +23,18 @@ public class BidTable extends Table
         style.font = Pitch.font4;
 
         //Setup buttons to take bids
-        bid0Btn = new TextButton("0", style);
+        bid0Btn = new TextButton("PASS", style);
         bid2Btn = new TextButton("2", style);
         bid3Btn = new TextButton("3", style);
         bid4Btn = new TextButton("4", style);
 
         //Add buttons and labels to the table
         this.setFillParent(true);
-        this.add(bid0Btn).pad(padding);
         this.add(bid2Btn).pad(padding);
         this.add(bid3Btn).pad(padding);
         this.add(bid4Btn).pad(padding);
+        this.row();
+        this.add(bid0Btn).pad(padding).colspan(3);
         this.pack();
         stage.addActor(this);
     }
