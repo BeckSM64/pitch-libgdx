@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
-public class ScoreTable extends Table {
-
+public class ScoreTable extends Table
+{
     private Stage stage;
     private Label player1Score;
     private Label player2Score;
@@ -34,8 +34,8 @@ public class ScoreTable extends Table {
     private Label player4Game;
     private TextButton nextRoundBtn;
 
-    public ScoreTable() {
-
+    public ScoreTable()
+    {
         stage = new Stage();//Create stage for table
         int padding = (int) (12 * Gdx.graphics.getDensity());
 
@@ -151,62 +151,96 @@ public class ScoreTable extends Table {
         stage.addActor(this);
     }
 
-    public TextButton getNextRoundBtn() {
+    public TextButton getNextRoundBtn()
+    {
         return nextRoundBtn;
     }
 
-    public void setPlayer1Score(int player1Score) {
+    public void setPlayer1Score(int player1Score)
+    {
         this.player1Score.setText(Integer.toString(player1Score));
     }
 
-    public void setPlayer2Score(int player2Score) {
+    public void setPlayer2Score(int player2Score)
+    {
         this.player2Score.setText(Integer.toString(player2Score));
     }
 
-    public void setPlayer3Score(int player3Score) {
+    public void setPlayer3Score(int player3Score)
+    {
         this.player3Score.setText(Integer.toString(player3Score));
     }
 
-    public void setPlayer4Score(int player4Score) {
+    public void setPlayer4Score(int player4Score)
+    {
         this.player4Score.setText(Integer.toString(player4Score));
     }
 
-    public void setPlayerHigh(int playerIndex) {
+    public void setPlayerHigh(int playerIndex)
+    {
         if(playerIndex == 0)
+        {
             this.player1High.setText("1");
+        }
         else if(playerIndex == 1)
+        {
             this.player2High.setText("1");
+        }
         else if(playerIndex == 2)
+        {
             this.player3High.setText("1");
+        }
         else
+        {
             this.player4High.setText("1");
-    }
-
-    public void setPlayerJack(int playerIndex) {
-        if(playerIndex >= 0) {
-            if (playerIndex == 0)
-                this.player1Jack.setText("1");
-            else if (playerIndex == 1)
-                this.player2Jack.setText("1");
-            else if (playerIndex == 2)
-                this.player3Jack.setText("1");
-            else
-                this.player4Jack.setText("1");
         }
     }
 
-    public void setPlayerLow(int playerIndex) {
-        if(playerIndex == 0)
-            this.player1Low.setText("1");
-        else if(playerIndex == 1)
-            this.player2Low.setText("1");
-        else if(playerIndex == 2)
-            this.player3Low.setText("1");
-        else
-            this.player4Low.setText("1");
+    public void setPlayerJack(int playerIndex)
+    {
+        if(playerIndex >= 0)
+        {
+            if (playerIndex == 0)
+            {
+                this.player1Jack.setText("1");
+            }
+            else if (playerIndex == 1)
+            {
+                this.player2Jack.setText("1");
+            }
+            else if (playerIndex == 2)
+            {
+                this.player3Jack.setText("1");
+            }
+            else
+            {
+                this.player4Jack.setText("1");
+            }
+        }
     }
 
-    public void setPlayerGame(int playerIndex) {
+    public void setPlayerLow(int playerIndex)
+    {
+        if(playerIndex == 0)
+        {
+            this.player1Low.setText("1");
+        }
+        else if(playerIndex == 1)
+        {
+            this.player2Low.setText("1");
+        }
+        else if(playerIndex == 2)
+        {
+            this.player3Low.setText("1");
+        }
+        else
+        {
+            this.player4Low.setText("1");
+        }
+    }
+
+    public void setPlayerGame(int playerIndex)
+    {
         if(playerIndex == 0)
             this.player1Game.setText("1");
         else if(playerIndex == 1)
@@ -217,7 +251,8 @@ public class ScoreTable extends Table {
             this.player4Game.setText("1");
     }
 
-    public void resetPointLabels() {
+    public void resetPointLabels()
+    {
         this.player1High.setText("-");
         this.player2High.setText("-");
         this.player3High.setText("-");
@@ -236,11 +271,13 @@ public class ScoreTable extends Table {
         this.player4Game.setText("-");
     }
 
-    public Stage getStage() {
+    public Stage getStage()
+    {
         return this.stage;
     }
 
-    public void dispose() {
+    public void dispose()
+    {
         this.stage.dispose();
     }
 }

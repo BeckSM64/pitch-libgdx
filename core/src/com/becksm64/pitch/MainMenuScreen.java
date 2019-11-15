@@ -14,18 +14,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-public class MainMenuScreen implements Screen {
-
+public class MainMenuScreen implements Screen
+{
     private Game game;
     private OrthographicCamera cam;
     private Stage stage;
     private TextButton startButton;
 
-    public MainMenuScreen(Game game) {
-
+    public MainMenuScreen(Game game)
+    {
         this.game = game;
         cam = new OrthographicCamera();
-        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());//Set camera viewport to device screen size
+
+        //Set camera viewport to device screen size
+        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         //Table and stage stuff
         stage = new Stage();
@@ -49,21 +51,24 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override
-    public void show() {
-
+    public void show()
+    {
         //Listener for start button to complete action when clicked
-        startButton.addListener(new ChangeListener() {
-
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameScreen(game));//Start a new game if the start button is pressed
+        startButton.addListener(new ChangeListener()
+            {
+                @Override
+                public void changed(ChangeEvent event, Actor actor)
+                {
+                    //Start a new game if the start button is pressed
+                    game.setScreen(new GameScreen(game));
+                }
             }
-        });
+        );
     }
 
     @Override
-    public void render(float delta) {
-
+    public void render(float delta)
+    {
         //Clear the screen with some color
         Gdx.gl.glClearColor(0, 0.75f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -73,27 +78,32 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(int width, int height)
+    {
         
     }
 
     @Override
-    public void pause() {
+    public void pause()
+    {
 
     }
 
     @Override
-    public void resume() {
+    public void resume()
+    {
 
     }
 
     @Override
-    public void hide() {
+    public void hide()
+    {
 
     }
 
     @Override
-    public void dispose() {
+    public void dispose()
+    {
 
     }
 }

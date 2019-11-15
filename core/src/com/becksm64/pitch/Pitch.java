@@ -5,14 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
-public class Pitch extends Game {
-
+public class Pitch extends Game
+{
 	//Global fonts
 	static BitmapFont font1, font2, font3, font4;
 
 	@Override
-	public void create () {
-
+	public void create ()
+	{
 		//Create static font that is scalable
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/cour.TTF"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -31,13 +31,14 @@ public class Pitch extends Game {
 	}
 
 	@Override
-	public void render () {
+	public void render ()
+	{
 		super.render();
 	}
 	
 	@Override
-	public void dispose () {
-
+	public void dispose ()
+	{
 		font1.dispose();
 		font2.dispose();
 		font3.dispose();

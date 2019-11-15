@@ -11,13 +11,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class Hud {
-
+public class Hud
+{
     private Stage stage;
     private Label playerBid;
 
-    public Hud(SpriteBatch batch) {
-
+    public Hud(SpriteBatch batch)
+    {
         Viewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport, batch);
         Table table = new Table();
@@ -36,15 +36,18 @@ public class Hud {
         stage.addActor(table);
     }
 
-    public void setPlayerBid(String playerBid) {
+    public void setPlayerBid(String playerBid)
+    {
         this.playerBid.setText(playerBid);
     }
 
-    public Stage getStage() {
+    public Stage getStage()
+    {
         return this.stage;
     }
 
-    public void dispose() {
+    public void dispose()
+    {
         this.stage.dispose();
     }
 }

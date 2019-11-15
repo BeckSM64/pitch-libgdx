@@ -14,16 +14,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-public class GameOverScreen implements Screen {
-
+public class GameOverScreen implements Screen
+{
     private Game game;
     private OrthographicCamera cam;
     private Stage stage;
     private TextButton newGameBtn;
     private TextButton quitBtn;
 
-    public GameOverScreen(Game game, int winner) {
-
+    public GameOverScreen(Game game, int winner)
+    {
         this.game = game;
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());//Set camera viewport to device screen size
@@ -60,32 +60,37 @@ public class GameOverScreen implements Screen {
     }
 
     @Override
-    public void show() {
-
+    public void show()
+    {
         //Starts new game when clicked
-        newGameBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                dispose();
-                game.setScreen(new GameScreen(game));
+        newGameBtn.addListener(new ChangeListener()
+            {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    dispose();
+                    game.setScreen(new GameScreen(game));
+                }
             }
-        });
+        );
 
         //Quits the app when clicked
-        quitBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                dispose();
-                game.dispose();
-                Gdx.app.exit();
-                System.exit(0);
+        quitBtn.addListener(new ChangeListener()
+            {
+                @Override
+                public void changed(ChangeEvent event, Actor actor)
+                {
+                    dispose();
+                    game.dispose();
+                    Gdx.app.exit();
+                    System.exit(0);
+                }
             }
-        });
+        );
     }
 
     @Override
-    public void render(float delta) {
-
+    public void render(float delta)
+    {
         //Clear the screen with some color
         Gdx.gl.glClearColor(0, 0.75f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -95,27 +100,32 @@ public class GameOverScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(int width, int height)
+    {
 
     }
 
     @Override
-    public void pause() {
+    public void pause()
+    {
 
     }
 
     @Override
-    public void resume() {
+    public void resume()
+    {
 
     }
 
     @Override
-    public void hide() {
+    public void hide()
+    {
 
     }
 
     @Override
-    public void dispose() {
+    public void dispose()
+    {
         stage.dispose();
     }
 }

@@ -5,16 +5,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-public class BidTable extends Table {
-
+public class BidTable extends Table
+{
     private Stage stage;
     private TextButton bid0Btn;
     private TextButton bid2Btn;
     private TextButton bid3Btn;
     private TextButton bid4Btn;
 
-    public BidTable() {
-
+    public BidTable()
+    {
         stage = new Stage();//Create stage for table
         int padding = (int) (12 * Gdx.graphics.getDensity());
 
@@ -38,27 +38,33 @@ public class BidTable extends Table {
         stage.addActor(this);
     }
 
-    public TextButton getBid0Btn() {
+    public TextButton getBid0Btn()
+    {
         return bid0Btn;
     }
 
-    public TextButton getBid2Btn() {
+    public TextButton getBid2Btn()
+    {
         return bid2Btn;
     }
 
-    public TextButton getBid3Btn() {
+    public TextButton getBid3Btn()
+    {
         return bid3Btn;
     }
 
-    public TextButton getBid4Btn() {
+    public TextButton getBid4Btn()
+    {
         return bid4Btn;
     }
 
-    public Stage getStage() {
+    public Stage getStage()
+    {
         return this.stage;
     }
 
-    public void dispose() {
+    public void dispose()
+    {
         this.stage.dispose();
     }
 }
