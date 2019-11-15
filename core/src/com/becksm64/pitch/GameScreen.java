@@ -87,10 +87,10 @@ public class GameScreen implements Screen {
         }
 
         //Create suit textures
-        spadeImage = new Texture("suits/spades.png");
-        clubImage = new Texture("suits/clubs.png");
-        heartImage = new Texture("suits/hearts.png");
-        diamondImage = new Texture("suits/diamonds.png");
+        spadeImage = new Texture("suits/spade_xxxhdpi.png");
+        clubImage = new Texture("suits/club_xxxhdpi.png");
+        heartImage = new Texture("suits/heart_xxxhdpi.png");
+        diamondImage = new Texture("suits/diamond_xxxhdpi.png");
         arrowImage = new Texture("arrow.png");//Arrow image to point to player whose turn it is
 
         dealHands();//Deal hands
