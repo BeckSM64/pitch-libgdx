@@ -49,6 +49,7 @@ public class GameScreen implements Screen {
     private int dealer;
     private int cardSpeed;
     private boolean cardsMoving;
+    private boolean displayScoreTable;
 
     //Scoring
     private int highPoint;
@@ -108,6 +109,7 @@ public class GameScreen implements Screen {
         jackPoint = -1;//Make sure point is not counted unless jack is out
         cardSpeed = (int) (30 * Gdx.graphics.getDensity());//Card speed calculated based on screen size
         cardsMoving = true;
+        displayScoreTable = false;//Boolean to determine whether or not to display scores
 
         //Create camera and set view
         cam = new OrthographicCamera();
@@ -178,6 +180,7 @@ public class GameScreen implements Screen {
         highestBid = -1;
         bidsTaken = 0;
         allBidsTaken = false;
+        displayScoreTable = false;
 
         //Set the next dealer
         if(dealer == 3)
@@ -215,7 +218,9 @@ public class GameScreen implements Screen {
 
         //Remove cards from the main pile and add them to the pile of cards that the player won
         for(int i = 0; i < players.size(); i++) {
-            players.get(playedBestCard).addToCardsWon(mainPile.removeCard());
+            if(mainPile.size() > 0) {
+                players.get(playedBestCard).addToCardsWon(mainPile.removeCard());
+            }
         }
 
         currentSuit = null;//Reset current suit
@@ -379,6 +384,8 @@ public class GameScreen implements Screen {
             else
                 currentPlayer.addToScore(playerBid * -1);//Subtract bid from player score
         }
+
+        calculatedScore = true;
     }
 
     /*
@@ -553,6 +560,10 @@ public class GameScreen implements Screen {
             else
                 currentCard.setPositionX(currentCard.getPosition().x + cardSpeed);
         }
+    }
+
+    private boolean allPlayersGone() {
+        return numPlays > 3;
     }
 
     /*
@@ -764,14 +775,14 @@ public class GameScreen implements Screen {
             takePlayerBid();
         }
 
+        drawAssets();//Draw cards, arrow, and trump image
+
         if(!isRoundOver()) {
 
             //Update cards player hands
             for(Player player : players) {
                 player.getPlayerHand().update();
             }
-
-            drawAssets();//Draw cards, arrow, and trump image
 
             //Only start turns after bids have been taken and if all players haven't already gone
             if(allBidsTaken && numPlays <= 3) {
@@ -849,14 +860,15 @@ public class GameScreen implements Screen {
                     }
                 }
             }
+
+            //Check if all player's have gone
+            if(playerTurn > 3) {
+                playerTurn = 0;//Go back to first player
+            }
         }
 
-        //Check if all player's have gone
-        if(playerTurn > 3)
-            playerTurn = 0;//Go back to first player
-
         //Check if play is over, after all four players have gone
-        if(numPlays > 3) {
+        if(allPlayersGone()) {
 
             //Adds a delay after all cards have been played so player can see what cards were played
             timeSeconds2 += Gdx.graphics.getRawDeltaTime();//Wait specified amount of time until opponent takes their turn
@@ -867,12 +879,17 @@ public class GameScreen implements Screen {
                 if(timeSeconds2 > 3f) {
                     timeSeconds2 -= 3f;
                     resetPlay();//Reset table
+
+                    if(isRoundOver()) {
+                        displayScoreTable = true;
+                    }
                 }
             }
         }
 
         //When round is over, start a new round
         if(isRoundOver()) {
+
             if(!calculatedScore) {
 
                 calculatePlayerScores();
@@ -882,7 +899,10 @@ public class GameScreen implements Screen {
                     game.setScreen(new GameOverScreen(this.game, winner));
                 }
             }
-            displayScoreTable();
+
+            if(displayScoreTable) {
+                displayScoreTable();
+            }
         }
     }
 
@@ -918,6 +938,7 @@ public class GameScreen implements Screen {
         mainPile.dispose();
         scoreTable.dispose();
         bidTable.dispose();
+        hud.dispose();
         spadeImage.dispose();
         heartImage.dispose();
         diamondImage.dispose();
