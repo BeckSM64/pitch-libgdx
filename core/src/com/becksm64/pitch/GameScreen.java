@@ -962,7 +962,10 @@ public class GameScreen implements Screen
             drawTrumpImage();
 
             //Draw arrow image
-            drawArrowImage();
+            if(!allPlayersGone())
+            {
+                drawArrowImage();
+            }
 
             //Draw the heads up display
             batch.setProjectionMatrix(hud.getStage().getCamera().combined);
