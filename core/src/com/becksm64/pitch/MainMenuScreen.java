@@ -6,6 +6,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -20,10 +23,14 @@ public class MainMenuScreen implements Screen
     private OrthographicCamera cam;
     private Stage stage;
     private TextButton startButton;
+    private Batch batch;
+    private Texture spadeImage;
 
     public MainMenuScreen(Game game)
     {
         this.game = game;
+        batch = new SpriteBatch();
+        spadeImage = new Texture(Gdx.files.internal("suits/spade_xxxhdpi.png"));
         cam = new OrthographicCamera();
 
         //Set camera viewport to device screen size
@@ -73,6 +80,23 @@ public class MainMenuScreen implements Screen
         Gdx.gl.glClearColor(0, 0.75f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        batch.setProjectionMatrix(cam.combined);
+        batch.begin();//Start drawing
+
+        //Draw background image
+        batch.draw(Pitch.background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        //Draw assets on screen
+        batch.draw(
+                spadeImage,
+                (Gdx.graphics.getWidth() / 2) - Card.WIDTH * 2,
+                (Gdx.graphics.getHeight() / 2) - Card.WIDTH * 2,
+                Card.WIDTH * 4,
+                Card.WIDTH * 4
+        );
+
+        batch.end();//Stop drawing
+
         cam.update();
         stage.draw();
     }
@@ -104,6 +128,8 @@ public class MainMenuScreen implements Screen
     @Override
     public void dispose()
     {
-
+        batch.dispose();
+        spadeImage.dispose();
+        stage.dispose();
     }
 }

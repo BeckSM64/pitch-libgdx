@@ -6,6 +6,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -19,12 +21,14 @@ public class GameOverScreen implements Screen
     private Game game;
     private OrthographicCamera cam;
     private Stage stage;
+    private Batch batch;
     private TextButton newGameBtn;
     private TextButton quitBtn;
 
     public GameOverScreen(Game game, int winner)
     {
         this.game = game;
+        batch = new SpriteBatch();
         cam = new OrthographicCamera();
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());//Set camera viewport to device screen size
         int padding = (int) (100 * Gdx.graphics.getDensity());
@@ -95,6 +99,14 @@ public class GameOverScreen implements Screen
         Gdx.gl.glClearColor(0, 0.75f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        batch.setProjectionMatrix(cam.combined);
+        batch.begin();//Start drawing
+
+        //Draw background image
+        batch.draw(Pitch.background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        batch.end();//Stop drawing
+
         cam.update();
         stage.draw();
     }
@@ -127,5 +139,6 @@ public class GameOverScreen implements Screen
     public void dispose()
     {
         stage.dispose();
+        batch.dispose();
     }
 }

@@ -942,6 +942,14 @@ public class GameScreen implements Screen
         batch.end();
     }
 
+    private void drawBackgroundImage()
+    {
+        batch.setProjectionMatrix(cam.combined);
+        batch.begin();//Start drawing
+        batch.draw(Pitch.background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.end();//Stop drawing
+    }
+
     @Override
     public void render(float delta)
     {
@@ -950,6 +958,7 @@ public class GameScreen implements Screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         cam.update();//Update camera
+        drawBackgroundImage();
 
         if(!allBidsTaken)
         {

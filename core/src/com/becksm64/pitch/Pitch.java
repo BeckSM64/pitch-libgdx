@@ -2,6 +2,7 @@ package com.becksm64.pitch;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
@@ -10,9 +11,15 @@ public class Pitch extends Game
 	//Global fonts
 	static BitmapFont font1, font2, font3, font4;
 
+	//Global background image
+	static Texture background;
+
 	@Override
 	public void create ()
 	{
+		//Create static background image for whole appp
+		background = new Texture("background.jpg");
+
 		//Create static font that is scalable
 		FreeTypeFontGenerator.setMaxTextureSize(4096);
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/chewy.ttf"));
@@ -44,5 +51,6 @@ public class Pitch extends Game
 		font2.dispose();
 		font3.dispose();
 		font4.dispose();
+		background.dispose();
 	}
 }
