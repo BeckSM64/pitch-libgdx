@@ -30,7 +30,10 @@ public class Hand
     /* Add a card to the hand */
     public void addToHand(Card card)
     {
-        this.hand.add(card);
+        if(!isFull())
+        {
+            this.hand.add(card);
+        }
     }
 
     /* Get the number of cards currently in hand */
