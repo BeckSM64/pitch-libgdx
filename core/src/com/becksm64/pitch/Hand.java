@@ -27,12 +27,20 @@ public class Hand
         }
     }
 
-    /* Add a card to the hand */
+    /*
+     * Add a card to the hand
+     * Only does so if hand is not already full
+     * If it is full, the card is disposed of
+     */
     public void addToHand(Card card)
     {
         if(!isFull())
         {
             this.hand.add(card);
+        }
+        else
+        {
+            card.dispose();
         }
     }
 
