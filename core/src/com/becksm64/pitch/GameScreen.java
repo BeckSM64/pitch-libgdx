@@ -995,7 +995,6 @@ public class GameScreen implements Screen
                     {
                         if (Gdx.input.justTouched())
                         {
-                            playCardSound.play();
                             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
                             cam.unproject(touchPos);
 
@@ -1008,6 +1007,9 @@ public class GameScreen implements Screen
                                 if (currentCard.getBounds().contains(touchPos.x, touchPos.y)
                                         && currentCard.isPlayable(trump, currentSuit, numPlays, hasCurrentSuit))
                                 {
+                                    //Play sound when card is played
+                                    playCardSound.play();
+
                                     if (isStartOfRound())
                                     {
                                         trump = currentCard.getSuit();
