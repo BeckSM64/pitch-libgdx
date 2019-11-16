@@ -38,11 +38,11 @@ public class GameOverScreen implements Screen
         Label gameOverLabel = new Label("Game Over", skin);
         Label winnerLabel = new Label("Player " + winner + " wins!", skin);
         gameOverLabel.setStyle(new Label.LabelStyle(Pitch.font1, Color.WHITE));
-        winnerLabel.setStyle(new Label.LabelStyle(Pitch.font2, Color.WHITE));
+        winnerLabel.setStyle(new Label.LabelStyle(Pitch.font4, Color.WHITE));
 
         //Buttons
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = Pitch.font2;
+        style.font = Pitch.font4;
         newGameBtn = new TextButton("NEW GAME", style);
         quitBtn = new TextButton("QUIT", style);
 
