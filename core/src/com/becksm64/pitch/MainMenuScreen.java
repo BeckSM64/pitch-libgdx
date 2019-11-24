@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MainMenuScreen implements Screen
 {
@@ -25,6 +27,7 @@ public class MainMenuScreen implements Screen
     private TextButton startButton;
     private Batch batch;
     private Texture spadeImage;
+    private Viewport viewport;
 
     public MainMenuScreen(Game game)
     {
@@ -32,12 +35,10 @@ public class MainMenuScreen implements Screen
         batch = new SpriteBatch();
         spadeImage = new Texture(Gdx.files.internal("suits/spade_xxxhdpi.png"));
         cam = new OrthographicCamera();
-
-        //Set camera viewport to device screen size
-        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        viewport = new ScreenViewport(cam);
 
         //Table and stage stuff
-        stage = new Stage();
+        stage = new Stage(viewport);
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -84,13 +85,13 @@ public class MainMenuScreen implements Screen
         batch.begin();//Start drawing
 
         //Draw background image
-        batch.draw(Pitch.background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(Pitch.background, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
 
         //Draw assets on screen
         batch.draw(
                 spadeImage,
-                (Gdx.graphics.getWidth() / 2) - Card.WIDTH * 2,
-                (Gdx.graphics.getHeight() / 2) - Card.WIDTH * 2,
+                (viewport.getWorldWidth() / 2) - Card.WIDTH * 2,
+                (viewport.getWorldHeight() / 2) - Card.WIDTH * 2,
                 Card.WIDTH * 4,
                 Card.WIDTH * 4
         );
@@ -104,7 +105,8 @@ public class MainMenuScreen implements Screen
     @Override
     public void resize(int width, int height)
     {
-        
+        viewport.update(width, height);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

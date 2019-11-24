@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class BidTable extends Table
 {
@@ -13,9 +14,9 @@ public class BidTable extends Table
     private TextButton bid3Btn;
     private TextButton bid4Btn;
 
-    public BidTable()
+    public BidTable(Viewport viewport)
     {
-        stage = new Stage();//Create stage for table
+        stage = new Stage(viewport);//Create stage for table
         int padding = (int) (12 * Gdx.graphics.getDensity());
 
         //Setup styles for buttons and labels

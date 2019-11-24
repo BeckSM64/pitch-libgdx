@@ -14,6 +14,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ public class GameScreen implements Screen
     private Game game;
     private SpriteBatch batch;
     private Vector3 touchPos;
+    private Viewport viewport;
 
     //Game objects and assets
     private Deck deck;
@@ -35,6 +38,7 @@ public class GameScreen implements Screen
     private Texture trumpImage;//Will change depending on current trump
     private Texture arrowImage;
     private Sound playCardSound;//Sound for playing a single card
+    private Vector3 endPosition;//Where cards will be played on the table
 
     //Game logic
     private String trump;
@@ -75,7 +79,6 @@ public class GameScreen implements Screen
     {
         this.game = game;
         batch = new SpriteBatch();
-        hud = new Hud(batch);
         touchPos = new Vector3(0,0,0);
 
         deck = new Deck();
@@ -83,7 +86,7 @@ public class GameScreen implements Screen
         mainPile = new CardCollection();//Create the pile which cards are played to
 
         //Add new hands to collection of hands
-        players = new ArrayList<Player>();
+        players = new ArrayList<>();
         for(int i = 0; i < 4; i ++)
         {
             players.add(new Player());
@@ -119,10 +122,18 @@ public class GameScreen implements Screen
 
         //Create camera and set view
         cam = new OrthographicCamera();
-        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        viewport = new ScreenViewport(cam);
 
-        scoreTable = new ScoreTable();//Table for score at end of round
-        bidTable = new BidTable();//Table for taking bid at the beginning of the round
+        //Calculate position where cards will be played
+        endPosition = new Vector3(
+                (viewport.getWorldWidth() / 2.0f) - (Card.WIDTH / 2.0f),
+                (viewport.getWorldHeight() / 2.0f) - (Card.HEIGHT / 2.0f),
+                0
+        );
+
+        scoreTable = new ScoreTable(viewport);//Table for score at end of round
+        bidTable = new BidTable(viewport);//Table for taking bid at the beginning of the round
+        hud = new Hud(batch, viewport);
 
         //Set input processors for stages
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -742,7 +753,7 @@ public class GameScreen implements Screen
                         batch.setColor(c.r, c.g, c.b, 1);
                     }
 
-                    currentCard.setPositionX((Gdx.graphics.getWidth() / 6.0f) * j);
+                    currentCard.setPositionX((viewport.getWorldWidth() / 6.0f) * j);
                     batch.draw(
                             currentCard.getCardImage(),
                             currentCard.getPosition().x,
@@ -1165,8 +1176,16 @@ public class GameScreen implements Screen
     @Override
     public void resize(int width, int height)
     {
-        cam.setToOrtho(false, width, height);
-        batch.setProjectionMatrix(cam.combined);
+        //Update viewport with new screen size
+        viewport.update(width, height);
+
+        //Update stage viewports with new screen size
+        bidTable.getStage().getViewport().update(width, height, true);
+        scoreTable.getStage().getViewport().update(width, height, true);
+        hud.getStage().getViewport().update(width, height, true);
+
+        //Update position where cards will be played
+
     }
 
     @Override

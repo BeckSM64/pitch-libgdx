@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Hud
@@ -16,9 +15,8 @@ public class Hud
     private Stage stage;
     private Label playerBid;
 
-    public Hud(SpriteBatch batch)
+    public Hud(SpriteBatch batch, Viewport viewport)
     {
-        Viewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport, batch);
         Table table = new Table();
         table.top();

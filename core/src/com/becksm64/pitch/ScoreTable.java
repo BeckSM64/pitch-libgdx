@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class ScoreTable extends Table
 {
@@ -34,9 +35,9 @@ public class ScoreTable extends Table
     private Label player4Game;
     private TextButton nextRoundBtn;
 
-    public ScoreTable()
+    public ScoreTable(Viewport viewport)
     {
-        stage = new Stage();//Create stage for table
+        stage = new Stage(viewport);//Create stage for table
         int padding = (int) (12 * Gdx.graphics.getDensity());
 
         //Create skin for labels for score table
