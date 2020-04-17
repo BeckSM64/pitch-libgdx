@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Card
 {
@@ -31,6 +32,7 @@ public class Card
         this.value = value;
         String name;
 
+        // Determine if this is a face card
         if(value > 10)
         {
             if(value == 11)
@@ -55,21 +57,36 @@ public class Card
             name = value + "_of_" + suit;
         }
 
-        cardImage = new Texture("cards/" + name + ".png");
+        // Create texture from the card png
+        cardImage = new Texture(Gdx.files.internal("cards/" + name + ".png"), true);
 
+        // Add filter to texture to improve image quality
+        cardImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
+
+        // Set size of card based on screen size
         cardWidth = Gdx.graphics.getWidth() / 6;
         cardHeight = Gdx.graphics.getHeight() / 6;
 
+        // Set default position of card to 0,0,0
         position = new Vector3(0, 0, 0);
+
+        // Set the position at which the card will be played to the center of the screen roughly
         endPosition = new Vector3(
                 (Gdx.graphics.getWidth() / 2.0f) - (this.getCardWidth() / 2.0f),
                 (Gdx.graphics.getHeight() / 2.0f) - (this.getCardHeight() / 2.0f),
                 0
         );
+
+        // Set bounds for the card
         bounds = new Rectangle(position.x, position.y, cardWidth, cardHeight);
+
+        // Assume the card is moving initially
         moving = true;
     }
 
+    /*
+     * Updates the bounds of the card to determine where it can be clicked
+     */
     public void update()
     {
         //Update card bounds to match current position
@@ -184,6 +201,18 @@ public class Card
     public void setMoving(boolean moving)
     {
         this.moving = moving;
+    }
+
+    /*
+     * Updates the position on the screen where cards will be played when screen is resized
+     */
+    public void setEndPosition()
+    {
+        endPosition = new Vector3(
+                (Gdx.graphics.getWidth() / 2.0f) - (this.getCardWidth() / 2.0f),
+                (Gdx.graphics.getHeight() / 2.0f) - (this.getCardHeight() / 2.0f),
+                0
+        );
     }
 
     public void dispose()

@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -122,7 +123,7 @@ public class GameScreen implements Screen
 
         //Create camera and set view
         cam = new OrthographicCamera();
-        viewport = new ScreenViewport(cam);
+        viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cam);
 
         //Calculate position where cards will be played
         endPosition = new Vector3(
@@ -270,21 +271,19 @@ public class GameScreen implements Screen
 
         if(trump != null)
         {
-            if (trump.equals("spades"))
+            switch(trump)
             {
-                trumpImage = spadeImage;
-            }
-            else if (trump.equals("clubs"))
-            {
-                trumpImage = clubImage;
-            }
-            else if (trump.equals("hearts"))
-            {
-                trumpImage = heartImage;
-            }
-            else
-            {
-                trumpImage = diamondImage;
+                case("spades"):
+                    trumpImage = spadeImage;
+                    break;
+                case("clubs"):
+                    trumpImage = clubImage;
+                    break;
+                case("hearts"):
+                    trumpImage = heartImage;
+                    break;
+                default:
+                    trumpImage = diamondImage;
             }
         }
     }
@@ -766,8 +765,8 @@ public class GameScreen implements Screen
                 {
                     currentCard.setPosition(
                             0 - (currentCard.getCardWidth() / 4.0f),//x
-                            (Gdx.graphics.getHeight() / 3.30f)
-                                    + (Gdx.graphics.getHeight() / 24.0f * j)//y
+                            (viewport.getScreenHeight() / 3.30f)
+                                    + (viewport.getScreenHeight() / 24.0f * j)//y
                     );
                     currentCard.setRotation(270);
                     batch.draw(
@@ -775,7 +774,7 @@ public class GameScreen implements Screen
                             currentCard.getPosition().x, currentCard.getPosition().y,
                             currentCard.getCardWidth() / 2.0f,
                             currentCard.getCardHeight() / 2.0f,
-                            currentCard.getCardWidth() /1.5f,
+                            currentCard.getCardWidth() / 1.5f,
                             currentCard.getCardHeight() / 1.5f,
                             1,
                             1,
@@ -785,9 +784,9 @@ public class GameScreen implements Screen
                 else if(i == 2)
                 {
                     currentCard.setPosition(
-                            (Gdx.graphics.getWidth() / 4.0f)
-                                    + (Gdx.graphics.getWidth() / 16.0f) * j,//x
-                            Gdx.graphics.getHeight()
+                            (viewport.getScreenWidth() / 4.0f)
+                                    + (viewport.getScreenWidth() / 16.0f) * j,//x
+                            viewport.getScreenHeight()
                                     - (currentCard.getCardHeight() / 1.5f)//y
                     );
                     currentCard.setRotation(180);
@@ -807,9 +806,9 @@ public class GameScreen implements Screen
                 else
                 {
                     currentCard.setPosition(
-                            Gdx.graphics.getWidth() - (currentCard.getCardWidth() / 1.25f),//x
-                            (Gdx.graphics.getHeight() / 3.0f)
-                                    + (Gdx.graphics.getHeight() / 24.0f * j)//y
+                            viewport.getScreenWidth() - (currentCard.getCardWidth() / 1.25f),//x
+                            (viewport.getScreenHeight() / 3.0f)
+                                    + (viewport.getScreenHeight() / 24.0f * j)//y
                     );
                     currentCard.setRotation(90);
                     batch.draw(
@@ -871,8 +870,8 @@ public class GameScreen implements Screen
         if (trump != null)
         {
             batch.draw(
-                    trumpImage, (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f),
-                    (Gdx.graphics.getHeight() / 2.0f) + (Card.HEIGHT + Card.HEIGHT / 2.0f),
+                    trumpImage, (viewport.getScreenWidth() / 2.0f) - (Card.WIDTH / 2.0f),
+                    (viewport.getScreenHeight() / 2.0f) + (Card.HEIGHT + Card.HEIGHT / 2.0f),
                     Card.WIDTH,
                     Card.WIDTH
             );
@@ -896,8 +895,8 @@ public class GameScreen implements Screen
             {
                 batch.draw(
                         new TextureRegion(arrowImage),
-                        (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f),
-                        (Gdx.graphics.getHeight() / 2.0f) - Card.HEIGHT,
+                        (viewport.getScreenWidth() / 2.0f) - (Card.WIDTH / 2.0f),
+                        (viewport.getScreenHeight() / 2.0f) - Card.HEIGHT,
                         Card.WIDTH / 2.0f, Card.WIDTH / 2.0f,
                         Card.WIDTH,
                         Card.WIDTH,
@@ -910,8 +909,8 @@ public class GameScreen implements Screen
             {
                 batch.draw(
                         new TextureRegion(arrowImage),
-                        (Gdx.graphics.getWidth() / 2.0f) - Card.HEIGHT,
-                        (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f),
+                        (viewport.getScreenWidth() / 2.0f) - Card.HEIGHT,
+                        (viewport.getScreenHeight() / 2.0f) - (Card.WIDTH / 2.0f),
                         Card.WIDTH / 2.0f,
                         Card.WIDTH / 2.0f,
                         Card.WIDTH, Card.WIDTH,
@@ -924,8 +923,8 @@ public class GameScreen implements Screen
             {
                 batch.draw(
                         new TextureRegion(arrowImage),
-                        (Gdx.graphics.getWidth() / 2.0f) - (Card.WIDTH / 2.0f),
-                        (Gdx.graphics.getHeight() / 2.0f) + Card.WIDTH,
+                        (viewport.getScreenWidth() / 2.0f) - (Card.WIDTH / 2.0f),
+                        (viewport.getScreenHeight() / 2.0f) + Card.WIDTH,
                         Card.WIDTH / 2.0f,
                         Card.WIDTH / 2.0f,
                         Card.WIDTH, Card.WIDTH,
@@ -938,8 +937,8 @@ public class GameScreen implements Screen
             {
                 batch.draw(
                         new TextureRegion(arrowImage),
-                        (Gdx.graphics.getWidth() / 2.0f) + (Card.HEIGHT / 2.0f),
-                        (Gdx.graphics.getHeight() / 2.0f) - (Card.WIDTH / 2.0f),
+                        (viewport.getScreenWidth() / 2.0f) + (Card.HEIGHT / 2.0f),
+                        (viewport.getScreenHeight() / 2.0f) - (Card.WIDTH / 2.0f),
                         Card.WIDTH / 2.0f,
                         Card.WIDTH / 2.0f,
                         Card.WIDTH, Card.WIDTH,
@@ -957,7 +956,7 @@ public class GameScreen implements Screen
     {
         batch.setProjectionMatrix(cam.combined);
         batch.begin();//Start drawing
-        batch.draw(Pitch.background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(Pitch.background, 0, 0, viewport.getScreenWidth(), viewport.getScreenHeight());
         batch.end();//Stop drawing
     }
 
@@ -1177,7 +1176,7 @@ public class GameScreen implements Screen
     public void resize(int width, int height)
     {
         //Update viewport with new screen size
-        viewport.update(width, height);
+        viewport.update(width, height, true);
 
         //Update stage viewports with new screen size
         bidTable.getStage().getViewport().update(width, height, true);
@@ -1185,7 +1184,25 @@ public class GameScreen implements Screen
         hud.getStage().getViewport().update(width, height, true);
 
         //Update position where cards will be played
+        for(int i = 0; i < mainPile.size(); i++)
+        {
+            mainPile.getCard(i).setEndPosition();
+        }
 
+        //Update position of all cards in deck
+        for(int j = 0; j < deck.size(); j++)
+        {
+            deck.getCard(j).setEndPosition();
+        }
+
+        //Update all cards in player hands
+        for(Player player : players)
+        {
+            for(int k = 0; k < player.getPlayerHand().size(); k++)
+            {
+                player.getPlayerHand().getCard(k).setEndPosition();
+            }
+        }
     }
 
     @Override

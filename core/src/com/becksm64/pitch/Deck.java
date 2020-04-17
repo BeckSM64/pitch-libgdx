@@ -55,6 +55,14 @@ public class Deck
     }
 
     /*
+     * Return the card at the specified index
+     */
+    public Card getCard(int index)
+    {
+        return this.deckOfCards.get(index);
+    }
+
+    /*
      * Get specific card from deck based on index
      */
     public Card viewCard(int index)
