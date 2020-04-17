@@ -1,4 +1,4 @@
-package com.becksm64.pitch;
+package com.becksm64.pitch.UI;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -15,8 +15,13 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.becksm64.pitch.Card;
+import com.becksm64.pitch.CardCollection;
+import com.becksm64.pitch.Deck;
+import com.becksm64.pitch.Hand;
+import com.becksm64.pitch.Pitch;
+import com.becksm64.pitch.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +44,6 @@ public class GameScreen implements Screen
     private Texture trumpImage;//Will change depending on current trump
     private Texture arrowImage;
     private Sound playCardSound;//Sound for playing a single card
-    private Vector3 endPosition;//Where cards will be played on the table
 
     //Game logic
     private String trump;
@@ -124,13 +128,6 @@ public class GameScreen implements Screen
         //Create camera and set view
         cam = new OrthographicCamera();
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cam);
-
-        //Calculate position where cards will be played
-        endPosition = new Vector3(
-                (viewport.getWorldWidth() / 2.0f) - (Card.WIDTH / 2.0f),
-                (viewport.getWorldHeight() / 2.0f) - (Card.HEIGHT / 2.0f),
-                0
-        );
 
         scoreTable = new ScoreTable(viewport);//Table for score at end of round
         bidTable = new BidTable(viewport);//Table for taking bid at the beginning of the round

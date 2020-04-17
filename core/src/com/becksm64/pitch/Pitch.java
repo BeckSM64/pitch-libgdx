@@ -5,14 +5,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.becksm64.pitch.UI.MainMenuScreen;
 
 public class Pitch extends Game
 {
 	//Global fonts
-	static BitmapFont font1, font2, font3, font4;
+	public static BitmapFont font1, font2, font3, font4;
 
 	//Global background image
-	static Texture background;
+	public static Texture background;
 
 	@Override
 	public void create ()

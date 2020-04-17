@@ -1,4 +1,4 @@
-package com.becksm64.pitch;
+package com.becksm64.pitch.UI;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.becksm64.pitch.Card;
+import com.becksm64.pitch.Pitch;
 
 public class MainMenuScreen implements Screen
 {

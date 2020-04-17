@@ -1,10 +1,11 @@
-package com.becksm64.pitch;
+package com.becksm64.pitch.UI;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.becksm64.pitch.Pitch;
 
 public class BidTable extends Table
 {

@@ -4,13 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Card
 {
-    static final int WIDTH = Gdx.graphics.getWidth() / 6;
-    static final int HEIGHT = Gdx.graphics.getHeight() / 6;
-    static final Texture backCardImage = new Texture("cards/back.png");
+    public static final int WIDTH = Gdx.graphics.getWidth() / 6;
+    public static final int HEIGHT = Gdx.graphics.getHeight() / 6;
+    public static final Texture backCardImage = new Texture("cards/back.png");
 
     private String suit;
     private int value;
